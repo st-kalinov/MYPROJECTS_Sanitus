@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+{% block stylesheet %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/product/main-category.css') }}">
+{% endblock %}
+{% block title %}Зоомагазин Онлайн, храни и аксесоари за домани любимци | Санитус{% endblock %}
+{% block body %}
+
+    {% if mainCategory.img is not same as ("") %}
+        <header class="main-category-name">
+            <img src="{{ mainCategory.imagePath }}">
+            <h2>{{ mainCategory.name }}</h2>
+            <p>{{ mainCategory.info }}</p>
+
+            <div class="white-border"></div>
+        </header>
+        <div class="check-all"><a href="#">Виж всички</a></div>
+
+    {% else %}
+        <header class="main-category-name">
+            <h2>{{ mainCategory.name }}</h2>
+            <p>{{ mainCategory.info }}</p>
+        </header>
+    {% endif %}
+
+
+{% endblock %}

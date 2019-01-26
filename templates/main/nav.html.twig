@@ -1,0 +1,47 @@
+{% block navbar %}
+    <nav class="navbar navbar-expand-lg font-weight-bold" >
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="fas fa-chevron-circle-down"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbar">
+            <ul class="navbar-nav mr-auto">
+                {% for mainCategory in mainCategories %}
+                    {% if mainCategory.subcategory is empty %}
+                        <li class="nav-item">
+                            <a href="{{ path('app_maincategory', {slug: mainCategory.slug}) }}" class="nav-link {{ active_main_category['slug'] == mainCategory.slug ? 'active'  }}">
+                                {{ mainCategory.name }}
+                            </a>
+                        </li>
+                    {% else %}
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle {{ active_main_category['slug'] == mainCategory.slug ? 'active' }}" href="{{ path('app_maincategory', {slug: mainCategory.slug}) }}" id="navbarDropdown" role="button"
+                               data-hover="dropdown" aria-haspopup="true" aria-expanded="false">
+                                {{ mainCategory.name }}
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <section class="categories">
+                                    {% for subCategory in mainCategory.subcategory %}
+                                        <section>
+                                            <div class="subcategory">
+                                                <a class="dropdown-item" href="#">{{ subCategory.name }}</a>
+                                            </div>
+                                            <div class="category">
+                                                {% for category in subCategory.category %}
+                                                    <div class="category-text">
+                                                        <a href="#">{{ category.name }}</a>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                        </section>
+                                    {% endfor %}
+                                </section>
+                            </div>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+    </nav>
+{% endblock %}

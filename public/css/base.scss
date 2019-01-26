@@ -1,0 +1,235 @@
+@import "fonts-and-colors";
+
+* {
+  box-sizing: border-box;
+}
+
+/* ---------------------------------------- MAIN STYLE ----------------------------------------*/
+body {
+  font-family: 'Open Sans', sans-serif, Georgia, 'Times New Roman', Times, serif;
+  font-size: 16px;
+
+  .container-fluid {
+    padding: 0;
+  }
+
+  background-color: white;
+}
+
+/* ---------------------------------------- TOP BAR STYLE ----------------------------------------*/
+address {
+  background-image: url("../images/main_images/topbar.png");
+  background-size: cover;
+  padding: $main-block-padding;
+  height: 4rem;
+  margin-bottom: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  ul {
+    display: flex;
+    margin-bottom: 0;
+    padding-left: 0;
+    margin-top: -1rem;
+
+    li {
+      list-style: none;
+      padding-right: 4rem;
+      color: white;
+    }
+
+    li:first-of-type {
+      padding-left: 1rem;
+    }
+  }
+
+  a {
+    color: white;
+
+    &:hover {
+      color: gray;
+      text-decoration: none;
+    }
+  }
+
+  .log-reg {
+    margin-top: -1rem;
+
+    a {
+      padding-left: 2rem;
+    }
+  }
+
+}
+
+/* ---------------------------------------- MAIN HEADER ----------------------------------------*/
+header {
+  padding: $main-block-padding;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+
+  .img-box {
+    text-align: center;
+
+    img {
+      width: 70%;
+      height: 70%;
+    }
+  }
+
+  // .search-form {
+  //   input{
+  //     border-top-left-radius: 2rem;
+  //     border-bottom-left-radius: 2rem;
+  //     width: 70%;
+  //     border-color: #007bff;
+  //   }
+  //   .input-group-append {
+  //     width: 30%;
+  //   }
+  //   button {
+  //     border-top-right-radius: 2rem;
+  //     border-bottom-right-radius: 2rem;
+  //     width: 100%;
+  //
+  //   }
+  // }
+  // .header-icons {
+  //   i {
+  //     font-size: 1.5rem;
+  //   }
+  // }
+
+}
+
+
+/* ---------------------------------------- NAVIGATION BAR STYLE ---------------------------------------- */
+nav {
+  background-color: #4bd6c5;
+
+  button {
+    margin: 1rem auto;
+  }
+
+  #navbar {
+    padding: $main-block-padding;
+
+    ul {
+
+      li {
+
+        text-align: center;
+
+        &.nav-item {
+          border-left: 2px solid transparent;
+          border-right: 2px solid transparent;
+
+          &:hover {
+            border-left: 2px solid white;
+            border-right: 2px solid white;
+            background-color: $navigation-hover-color;
+          }
+
+          a {
+            padding: 1rem 1rem;
+            color: white;
+          }
+
+          a.active {
+            background-color: $navigation-hover-color;
+          }
+        }
+
+        &.nav-item.active {
+          background: linear-gradient(white, #00ddf0);
+        }
+
+        div.dropdown-menu {
+          margin-top: 0;
+
+          a {
+            color: black;
+          }
+        }
+      }
+
+    }
+  }
+
+  section.categories {
+    display: flex;
+
+    min-width: 16.5rem;
+
+    section {
+      min-width: 17rem;
+      max-width: 25rem;
+
+      div.subcategory a {
+        font-weight: bold;
+        text-decoration: underline;
+
+        &:hover {
+          font-style: italic;
+        }
+      }
+
+      div.category {
+        text-indent: -1rem;
+        padding-left: 1rem;
+
+        div.category-text {
+          font-weight: normal;
+          margin-bottom: 1rem;
+        }
+      }
+    }
+  }
+
+}
+
+/* ---------------------------------------- BASE BODY CONTENT STYLE ---------------------------------------- */
+div.content {
+  width: 85%;
+  margin: auto;
+}
+
+/* ---------------------------------------- FOOTER STYLE ---------------------------------------- */
+footer {
+  background-image: url("../images/main_images/footerbar.png");
+  background-size: cover;
+
+  height: 4rem;
+}
+
+
+/* ---------------------------------------- MEDIAS ---------------------------------------- */
+@media screen and (max-width: 1155px) {
+  * {
+    font-size: 13px;
+  }
+}
+
+
+@media screen and (max-width: 950px) {
+  address {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 570px) {
+  header {
+    .logo-box {
+      text-align: center;
+
+      img {
+        width: 30%;
+        height: 30%;
+      }
+    }
+  }
+}

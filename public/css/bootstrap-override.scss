@@ -1,0 +1,8 @@
+.navbar {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.navbar-nav li:hover>.dropdown-menu {
+  display: block;
+}

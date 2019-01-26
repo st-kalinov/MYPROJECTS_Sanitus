@@ -1,0 +1,14 @@
+{% block top_address_bar %}
+    <address class="font-weight-bold">
+        <ul>
+            <li><i class="fas fa-phone"></i> +359 382 312 534</li>
+            {% for mainCategory in mainCategories %}
+                <li><a href="{{ path('app_maincategory', {'slug': mainCategory.slug}) }}">{{ mainCategory.name }}</a></li>
+            {% endfor %}
+        </ul>
+        <div class="log-reg">
+            <a href="#">Вход</a>
+            <a href="#">Регистрация</a>
+        </div>
+    </address>
+{% endblock %}
