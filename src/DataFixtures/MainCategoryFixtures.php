@@ -25,7 +25,6 @@ class MainCategoryFixtures extends BaseFixture
     private static $categoryImg = ['dog_img.jpg', 'cat_img.jpg', 'fish_img.jpg', 'bird_img.jpg', 'promo_img.png', "", "", ""];
     private static $categoryPlace = ['nav', 'nav', 'nav', 'nav', 'nav', 'info', 'info', 'info'];
 
-
     public function loadData(ObjectManager $manager)
     {
         $itemsCount = count(self::$categoryNames);

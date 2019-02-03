@@ -50,20 +50,18 @@ abstract class BaseFixture extends Fixture
 
             $this->manager->persist($entity);
         }
-
     }
 
-
-    protected function addMany($array, $addToObject, callable $factory)
+    protected function createManyAssociativeCustom($class1, $class2, $class1_key, $arr, callable $factory)
     {
-        foreach ($array as $value) {
-            $entity = new $addToObject();
-            $factory($entity, $value);
+        foreach ($arr as $class2_key) {
+
+            $reference1 = $this->getReference($class1.'_'.$class1_key);
+            $reference2 = $this->getReference($class2.'_'.$class2_key);
+
+            $factory($reference1, $reference2);
+            $this->manager->persist($reference1);
         }
     }
 
-    protected function addCustomReference($className, $name, $entity)
-    {
-        $this->addReference($className . '_' . $name, $entity);
-    }
 }

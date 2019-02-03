@@ -27,9 +27,9 @@ class MainController extends AbstractController
      */
     public function main_category(MainCategory $mainCategory)
     {
-        //$mainCategories = $mainCategoryRepository->findAllProductsByMainCategory();
-        return $this->render('product/main_category.html.twig', [
+        return $this->render('product/main_category_content.html.twig', [
             'mainCategory' => $mainCategory,
+            'products' => $mainCategory->getProducts()
         ]);
     }
 

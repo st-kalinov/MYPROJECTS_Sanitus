@@ -6,9 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Symfony\Component\DependencyInjection\Exception\LogicException;
-use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\MainCategoryRepository")
@@ -59,10 +57,22 @@ class MainCategory
      */
     private $category;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Product", mappedBy="mainCategory")
+     */
+    private $products;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Brand", inversedBy="mainCategories")
+     */
+    private $brand;
+
     public function __construct()
     {
         $this->subcategory = new ArrayCollection();
         $this->category = new ArrayCollection();
+        $this->products = new ArrayCollection();
+        $this->brand = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -192,6 +202,63 @@ class MainCategory
             if ($category->getMainCategory() === $this) {
                 $category->setMainCategory(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Product[]
+     */
+    public function getProducts(): Collection
+    {
+        return $this->products;
+    }
+
+    public function addProduct(Product $product): self
+    {
+        if (!$this->products->contains($product)) {
+            $this->products[] = $product;
+            $product->setMainCategory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProduct(Product $product): self
+    {
+        if ($this->products->contains($product)) {
+            $this->products->removeElement($product);
+            // set the owning side to null (unless already changed)
+            if ($product->getMainCategory() === $this) {
+                $product->setMainCategory(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Brand[]
+     */
+    public function getBrand(): Collection
+    {
+        return $this->brand;
+    }
+
+    public function addBrand(Brand $brand): self
+    {
+        if (!$this->brand->contains($brand)) {
+            $this->brand[] = $brand;
+        }
+
+        return $this;
+    }
+
+    public function removeBrand(Brand $brand): self
+    {
+        if ($this->brand->contains($brand)) {
+            $this->brand->removeElement($brand);
         }
 
         return $this;

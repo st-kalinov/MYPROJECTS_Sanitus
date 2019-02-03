@@ -15,7 +15,13 @@
             <div class="white-border"></div>
         </header>
         <div class="check-all"><a href="#">Виж всички</a></div>
-
+        <div>
+            {% for product in products %}
+                <p>{{ product.name }}</p>
+                <p>{{ product.id }}</p>
+                <p>{{ product.mainCategory.name }}</p>
+            {% endfor %}
+        </div>
     {% else %}
         <header class="main-category-name">
             <h2>{{ mainCategory.name }}</h2>

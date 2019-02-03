@@ -1,5 +1,8 @@
+{% if active_main_category is not null %}
+    {% set active_main_category_slug = active_main_category['slug'] %}
+{% endif %}
 {% block navbar %}
-    <nav class="navbar navbar-expand-lg font-weight-bold" >
+    <nav class="navbar navbar-expand-lg font-weight-bold">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <i class="fas fa-chevron-circle-down"></i>
@@ -9,19 +12,37 @@
                 {% for mainCategory in mainCategories %}
                     {% if mainCategory.subcategory is empty %}
                         <li class="nav-item">
-                            <a href="{{ path('app_maincategory', {slug: mainCategory.slug}) }}" class="nav-link {{ active_main_category['slug'] == mainCategory.slug ? 'active'  }}">
+                            <a href="{{ path('app_maincategory', {slug: mainCategory.slug}) }}"
+                               class="nav-link {% if active_main_category is not null %} {{ active_main_category['slug'] == mainCategory.slug ? 'active' }} {% endif %}">
                                 {{ mainCategory.name }}
                             </a>
                         </li>
                     {% else %}
 
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle {{ active_main_category['slug'] == mainCategory.slug ? 'active' }}" href="{{ path('app_maincategory', {slug: mainCategory.slug}) }}" id="navbarDropdown" role="button"
+                            <a class="nav-link dropdown-toggle {% if active_main_category is not null %} {{ active_main_category['slug'] == mainCategory.slug ? 'active' }} {% endif %}"
+                               href="{{ path('app_maincategory', {slug: mainCategory.slug}) }}"
+                               id="navbarDropdown" role="button"
                                data-hover="dropdown" aria-haspopup="true" aria-expanded="false">
                                 {{ mainCategory.name }}
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <section class="categories">
+                                    {% if mainCategory.brand is not empty %}
+                                        <section>
+                                            <div class="subcategory">
+                                                <a class="dropdown-item" href="#">Марки</a>
+                                            </div>
+                                            {% for brand in mainCategory.brand %}
+                                                <div class="category">
+                                                    <div class="category-text">
+                                                        <a href="#">{{ brand.name }}</a>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        </section>
+                                    {% endif %}
+
                                     {% for subCategory in mainCategory.subcategory %}
                                         <section>
                                             <div class="subcategory">
