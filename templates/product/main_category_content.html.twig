@@ -17,9 +17,10 @@
         <div class="check-all"><a href="#">Виж всички</a></div>
         <div>
             {% for product in products %}
-                <p>{{ product.name }}</p>
-                <p>{{ product.id }}</p>
-                <p>{{ product.mainCategory.name }}</p>
+                <small>{{ product.name }}</small><strong>{{ product.id }}</strong>
+                {% for variety in product.productVarieties %}
+                    <p>{{ variety.price }}</p>
+                {% endfor %}
             {% endfor %}
         </div>
     {% else %}

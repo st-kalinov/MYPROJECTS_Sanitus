@@ -162,6 +162,7 @@ class ProductFixtures extends BaseFixture implements DependentFixtureInterface
                ->setImg(self::$img[$i])
                ->setBrand($brand);
 
+           $this->addReference(Product::class.'_'.self::$names[$i], $product);
         });
 
         $manager->flush();
