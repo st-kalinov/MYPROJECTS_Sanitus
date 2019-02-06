@@ -5,7 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-
+use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CategoryRepository")
  */
@@ -39,6 +39,12 @@ class Category
      * @ORM\OneToMany(targetEntity="App\Entity\Product", mappedBy="category")
      */
     private $products;
+
+    /**
+     * @ORM\Column(type="string", length=150)
+     * @Gedmo\Slug(fields={"name"}, unique=false)
+     */
+    private $slugCat;
 
     public function __construct()
     {
@@ -113,6 +119,18 @@ class Category
                 $product->setCategory(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSlugCat(): ?string
+    {
+        return $this->slugCat;
+    }
+
+    public function setSlugCat(string $slugCat): self
+    {
+        $this->slugCat = $slugCat;
 
         return $this;
     }

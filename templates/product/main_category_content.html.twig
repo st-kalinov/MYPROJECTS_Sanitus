@@ -4,29 +4,52 @@
     <link rel="stylesheet" href="{{ asset('css/product/main-category.css') }}">
 {% endblock %}
 {% block title %}Зоомагазин Онлайн, храни и аксесоари за домани любимци | Санитус{% endblock %}
+
 {% block body %}
 
     {% if mainCategory.img is not same as ("") %}
         <header class="main-category-name">
+            <div class="white-border-top"></div>
             <img src="{{ mainCategory.imagePath }}">
             <h2>{{ mainCategory.name }}</h2>
             <p>{{ mainCategory.info }}</p>
-
             <div class="white-border"></div>
         </header>
         <div class="check-all"><a href="#">Виж всички</a></div>
-        <div>
-            {% for product in products %}
-                <small>{{ product.name }}</small><strong>{{ product.id }}</strong>
-                {% for variety in product.productVarieties %}
-                    <p>{{ variety.price }}</p>
+        {% if promotions is not empty %}
+            <h1 class="line-on-sides"><span>Промоции</span></h1>
+            <section class="row products-section">
+                {% for promotionProduct in promotions %}
+                    <div class="product-block col-md-6 col-xl-3 col-lg-3">
+                        <a href="{{ path('app_product_page',
+                        {main_category: promotionProduct.mainCategory.slug,
+                            sub_category: promotionProduct.subCategory.slugSub,
+                            category: promotionProduct.category.slugCat,
+                            id: promotionProduct.id})
+                        }}" class="img-block">
+                            <img src="images/products/{{ promotionProduct.img }}" alt="">
+                        </a>
+                        <div class="product-block-info">
+                            <a href="{{ path('app_product_page',
+                                {main_category: promotionProduct.mainCategory.slug,
+                                    sub_category: promotionProduct.subCategory.slugSub,
+                                    category: promotionProduct.category.slugCat,
+                                    id: promotionProduct.id})
+                            }}" class="product-name">{{ promotionProduct.name }}</a>
+                            <div class="product-price">
+                                <span class="promo-price">{{ promotionProduct.productVarieties[0].finalPrice }} лв.</span>
+                                <small>{{ promotionProduct.productVarieties[0].price }} лв.</small>
+                            </div>
+                        </div>
+                    </div>
                 {% endfor %}
-            {% endfor %}
-        </div>
+            </section>
+        {% endif %}
     {% else %}
         <header class="main-category-name">
             <h2>{{ mainCategory.name }}</h2>
             <p>{{ mainCategory.info }}</p>
+
         </header>
     {% endif %}
 

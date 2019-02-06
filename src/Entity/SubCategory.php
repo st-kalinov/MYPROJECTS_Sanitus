@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\SubCategoryRepository")
@@ -38,6 +39,12 @@ class SubCategory
      * @ORM\OneToMany(targetEntity="App\Entity\Product", mappedBy="subCategory")
      */
     private $products;
+
+    /**
+     * @ORM\Column(type="string", length=150)
+     * @Gedmo\Slug(fields={"name"}, unique=false)
+     */
+    private $slugSub;
 
     public function __construct()
     {
@@ -132,6 +139,18 @@ class SubCategory
                 $product->setSubCategory(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSlugSub(): ?string
+    {
+        return $this->slugSub;
+    }
+
+    public function setSlugSub(string $slugSub): self
+    {
+        $this->slugSub = $slugSub;
 
         return $this;
     }
