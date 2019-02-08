@@ -79,18 +79,17 @@ div.content h1.line-on-sides {
     padding: 0 10px; }
 
 div.content section.products-section {
-  justify-content: space-around;
   margin-top: 3rem;
   margin-bottom: 2rem; }
   div.content section.products-section div.product-block {
     border: 1px solid #dcdcdc;
-    transition: transform .2s;
     border-image: url(../../images/main_images/output-onlinepngtools2.png) 119/54px 48px/0px 0px 6px 0px round;
     padding: 0;
-    margin-bottom: 2rem; }
+    transition: transform .4s; }
     div.content section.products-section div.product-block a.img-block {
       display: block;
-      margin: 2rem auto; }
+      margin: 2rem auto;
+      transition: transform .4s; }
       div.content section.products-section div.product-block a.img-block img {
         display: block;
         width: 50%;
@@ -122,12 +121,12 @@ div.content section.products-section {
           font-weight: bold; }
         div.content section.products-section div.product-block div.product-block-info div.product-price small {
           text-decoration: line-through; }
-    div.content section.products-section div.product-block:hover {
-      -webkit-transform: scale(1.05);
-      -moz-transform: scale(1.05);
-      -ms-transform: scale(1.05);
-      -o-transform: scale(1.05);
-      transform: scale(1.05); }
+    div.content section.products-section div.product-block:hover a.img-block {
+      -webkit-transform: scale(1.2);
+      -moz-transform: scale(1.2);
+      -ms-transform: scale(1.2);
+      -o-transform: scale(1.2);
+      transform: scale(1.2); }
 
 @media (max-width: 925px) {
   div.content header.main-category-name h2 {

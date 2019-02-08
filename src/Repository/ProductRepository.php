@@ -19,20 +19,28 @@ class ProductRepository extends ServiceEntityRepository
         parent::__construct($registry, Product::class);
     }
 
-    public function findPromotionProductsByMainCategory($categoryName)
+    public function findPromotionProductsByMainCategorySlug($categorySlug)
     {
         return $this->createQueryBuilder('p')
             ->andWhere('pm.slug = :name')
             ->andWhere('pv.promotionCut != 0')
             ->join('p.mainCategory', 'pm' )
             ->join('p.productVarieties', 'pv')
-            ->setParameter('name', $categoryName)
+            ->setParameter('name', $categorySlug)
             ->getQuery()
-            ->setMaxResults(4)
             ->getResult();
 
     }
 
+    public function findProductsByMainCategorySlug($categorySlug)
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('pm.slug = :name')
+            ->join('p.mainCategory', 'pm' )
+            ->setParameter('name', $categorySlug)
+            ->getQuery()
+            ->getResult();
+    }
     // /**
     //  * @return ProductFixtures[] Returns an array of ProductFixtures objects
     //  */

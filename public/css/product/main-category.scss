@@ -102,19 +102,20 @@ div.content {
   }
 
   section.products-section {
-    justify-content: space-around;
     margin-top: 3rem;
     margin-bottom: 2rem;
+
+
       div.product-block {
         border: 1px solid #dcdcdc;
-        transition: transform .2s;
         border-image: url(../../images/main_images/output-onlinepngtools2.png) 119/54px 48px/0px 0px 6px 0px round;
         padding: 0;
-        //box-shadow: inset 0 0 2rem 0 rgba(0,0,0,0.75);
-        margin-bottom: 2rem;
+        transition: transform .4s;
+
         a.img-block {
           display: block;
           margin: 2rem auto;
+          transition: transform .4s;
 
           img {
             display: block;
@@ -158,13 +159,17 @@ div.content {
           }
         }
 
-        &:hover {
-          -webkit-transform: scale(1.05);
-          -moz-transform: scale(1.05);
-          -ms-transform: scale(1.05);
-          -o-transform: scale(1.05);
-          transform: scale(1.05);
-        }
+       &:hover {
+         a.img-block  {
+           -webkit-transform: scale(1.2);
+           -moz-transform: scale(1.2);
+           -ms-transform: scale(1.2);
+           -o-transform: scale(1.2);
+           transform: scale(1.2);
+
+         }
+
+       }
       }
   }
 }
