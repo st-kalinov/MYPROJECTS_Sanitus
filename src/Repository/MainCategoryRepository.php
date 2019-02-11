@@ -31,8 +31,13 @@ class MainCategoryRepository extends ServiceEntityRepository
 
     public function findNavbarCategories()
     {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.place = :val')
+        return $this->createQueryBuilder('m')
+            ->leftJoin('m.subcategory', 'ms')
+            ->leftJoin('m.brand', 'mb')
+            ->leftJoin('ms.category', 'msc')
+            ->addSelect('ms', 'mb')
+            ->addSelect('msc')
+            ->andWhere('m.place = :val')
             ->setParameter('val', 'nav')
             ->getQuery()
             ->getResult()
