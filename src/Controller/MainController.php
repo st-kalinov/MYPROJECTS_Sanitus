@@ -14,36 +14,36 @@ class MainController extends AbstractController
     /**
      * @Route("/", name="app_homepage")
      */
-    public function homepage(MainCategoryRepository $mainCategoryRepository)
+    public function homepage()
     {
-        return $this->render('base.html.twig', [
-            'mainCategories' => $mainCategoryRepository->findNavbarCategories(),
-        ]);
+        return $this->render('base.html.twig', []);
     }
 
     /**
      * @Route("/{slug}", name="app_maincategory")
      * @param MainCategory $mainCategory
      * @param ProductRepository $productRepository
-     * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function main_category(MainCategory $mainCategory, ProductRepository $productRepository, Request $request)
+    public function main_category(MainCategory $mainCategory, ProductRepository $productRepository)
     {
-        $mainCategorySlug = $request->attributes->get('slug');
+
+       $promotionProducts = $productRepository->getPromotionProductsByMainCategory($mainCategory);
+
         return $this->render('product/main_category_content.html.twig', [
             'mainCategory' => $mainCategory,
-            'promotions' => $productRepository->findPromotionProductsByMainCategory($mainCategorySlug)
+            'promotions' => $promotionProducts
         ]);
     }
 
     public function navbarItems(MainCategoryRepository $mainCategoryRepository, Request $request)
     {
         $active = $request->query->get('active_slug');
+        $mainCategories = $mainCategoryRepository->findNavbarCategories();
 
         return $this->render('main/nav.html.twig',
             [
-                'mainCategories' => $mainCategoryRepository->findNavbarCategories(),
+                'mainCategories' => $mainCategories,
                 'active_main_category' => $active !== null ? array_shift($active) : null
             ]
         );

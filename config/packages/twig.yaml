@@ -3,4 +3,4 @@ twig:
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
    ##globals:
-   ##    globalMainCategory: '@App\Service\MainCategoryLoaderService'
+   ##    globalMainCategory: '@App\Service\ProductFilteringHelperService'

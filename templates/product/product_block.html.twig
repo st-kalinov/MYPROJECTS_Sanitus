@@ -1,0 +1,13 @@
+{% if products is not empty %}
+    {% for product in products %}
+        <div>
+            <h2>{{ product.name }}</h2><small>{{ product.mainCategory.name }}</small>
+            {% for variety in product.productVarieties %}
+                <span>{{ variety.finalPrice }}</span>
+                <strong>PROMO: {{ variety.promotionCut }}</strong>
+            {% endfor %}
+        </div>
+    {% endfor %}
+{% else %}
+    <h2>Няма намерени продукти</h2>
+{% endif %}

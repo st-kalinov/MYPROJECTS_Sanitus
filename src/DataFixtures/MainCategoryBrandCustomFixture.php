@@ -19,6 +19,7 @@ class MainCategoryBrandCustomFixture extends BaseFixture implements DependentFix
     private static $brands = [
         'Кучета' => ['Royal Canin', 'Brit', 'Purina Pro Plan'],
         'Котки' => ['Royal Canin', 'Brit', 'Purina Pro Plan', 'Orijen'],
+        'Риби' => ['Tetra']
     ];
 
     protected function loadData(ObjectManager $manager)

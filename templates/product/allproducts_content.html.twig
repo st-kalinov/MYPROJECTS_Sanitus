@@ -1,0 +1,126 @@
+{% extends 'base.html.twig' %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function () {
+            const mainCategorySlug = $('#brandOptions').find('h2:first').data('slug');
+            const route = Routing.generate('app_products_maincategory', {slug: mainCategorySlug}, true);
+
+            $('#productbrandSection, #slider-range').on('click',  () => {
+                let brand = get_filter('brand');
+                let prices = get_prices();
+                let promotion = get_filter('promotion');
+
+                $.ajax({
+                    url: route,
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({brand: brand, price: prices, promotion: promotion[0]}),
+                    success: function (data) {
+                      $('.products').html(data);
+                    }
+                });
+
+            });
+
+            function get_filter(brandCategory_className) {
+                let checked = [];
+                $(`.${brandCategory_className} input:checkbox:checked`).each((index, element) => {
+                    checked.push($(element).val());
+                });
+
+                return checked;
+            }
+
+            function get_prices() {
+                let prices = [];
+                $('.price').each((index, element) => {
+                   prices.push($(element).val());
+                });
+
+                return prices;
+            }
+
+            $(() => {
+                let minPrice = 1;
+                let maxPrice = 300;
+                let currentMin = 1;
+                let currentMax = 300;
+
+                $("#slider-range").slider({
+                    range: true,
+                    min: minPrice,
+                    max: maxPrice,
+                    values: [ currentMin, currentMax ],
+                    slide: function( event, ui ) {
+                        $( "#amount" ).val(ui.values[ 0 ] + "лв. - " + ui.values[ 1 ] + ' лв.');
+                        currentMin = ui.values[0];
+                        currentMax = ui.values[1];
+                    },
+                    stop: function (event, ui) {
+                        currentMin = ui.values[0];
+                        currentMax = ui.values[1];
+                        $("input[name='minPrice']").val(currentMin);
+                        $("input[name='maxPrice']").val(currentMax);
+                    }
+                });
+                $( "#amount" ).val($("#slider-range").slider( "values", 0 ) + "лв. до " + $("#slider-range").slider( "values", 1 ) + 'лв.');
+            } );
+        });
+    </script>
+{% endblock %}
+{% block body %}
+    <div class="row">
+        <div style="min-height: 40rem; border: 1px solid black" id="brandOptions" class="col-sm-3">
+            <p>
+                <label for="amount">Price range:</label>
+                <input type="text" id="amount" readonly style="border:0; color:#f6931f; font-weight:bold;">
+                <input type="hidden" class="price" name="minPrice" value="1">
+                <input type="hidden" class="price" name="maxPrice" value="300">
+            </p>
+            <div id="slider-range"></div>
+
+
+            <h2 data-slug="{{ mainCategory.slug }}">{{ mainCategory.name }}</h2>
+            {% for subcategory in mainCategory.subcategory %}
+                <div class="option">
+                    <a href="{{ path('app_products_main_subcategory', {slug: mainCategory.slug, slugSub: subcategory.slugSub }) }}">{{ subcategory.name }}</a>
+                </div>
+            {% endfor %}
+            <section id="productbrandSection">
+                <h2 class="attribute-name">Марки</h2>
+                {% for brand in mainCategory.brand %}
+                    <div class="option brand">
+                        <label>
+                            <input type="checkbox" name="{{ brand.name }}" value="{{ brand.id }}">{{ brand.name }}
+                        </label>
+                    </div>
+                {% endfor %}
+                <h2 class="attribute-name">Промоции</h2>
+                <div class="option promotion">
+                    <label>
+                        <input type="checkbox" name="promotion" value="0">Промоции
+                    </label>
+                </div>
+            </section>
+        </div>
+        <div class="products col-sm-9">
+            {{ blocks|raw }}
+        </div>
+
+    </div>
+
+    {#
+      <ul>
+          {{ knp_pagination_sortable(pagination, 'Id', 'id') }}
+          {{ knp_pagination_sortable(pagination, 'name', 'name') }}
+          {% for product in pagination %}
+
+              <li>{{ product.name }}</li>
+              <li>{{ product.mainCategory.name }}</li>
+          {% endfor %}
+      </ul>
+
+      {{ knp_pagination_render(pagination) }}
+     #}
+{% endblock %}

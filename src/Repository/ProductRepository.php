@@ -2,8 +2,10 @@
 
 namespace App\Repository;
 
+use App\Entity\MainCategory;
 use App\Entity\Product;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Criteria;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -19,28 +21,36 @@ class ProductRepository extends ServiceEntityRepository
         parent::__construct($registry, Product::class);
     }
 
-    public function findPromotionProductsByMainCategorySlug($categorySlug)
+    public function getPromotionProductsByMainCategory(MainCategory $mainCategory)
     {
         return $this->createQueryBuilder('p')
-            ->andWhere('pm.slug = :name')
-            ->andWhere('pv.promotionCut != 0')
-            ->join('p.mainCategory', 'pm' )
+            ->select('p.id','p.name', 'p.img', 'pv.finalPrice', 'pv.price', 'pm.slug', 'ps.slugSub','pg.slugCat')
+            ->andWhere('p.mainCategory = :mainCat', 'pv.promotionCut != 0', 'p.instock = 1')
+            ->join('p.mainCategory', 'pm')
+            ->join('p.subCategory', 'ps')
+            ->join('p.category', 'pg')
             ->join('p.productVarieties', 'pv')
-            ->setParameter('name', $categorySlug)
+            ->setParameter('mainCat', $mainCategory)
             ->getQuery()
             ->getResult();
-
     }
 
-    public function findProductsByMainCategorySlug($categorySlug)
+    public function getProductsByMainCategoryWithCriteria($mainCategory, Criteria $criteria)
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('pm.slug = :name')
-            ->join('p.mainCategory', 'pm' )
-            ->setParameter('name', $categorySlug)
+
+        $qb = $this->createQueryBuilder('p');
+        return $qb
+            ->andWhere('p.mainCategory = :mainCat')
+            ->join('p.brand', 'pb')
+            ->join('p.productVarieties', 'pv')
+            ->addCriteria($criteria)
+            ->addSelect('pv')
+            ->addSelect('pb')
+            ->setParameter('mainCat', $mainCategory)
             ->getQuery()
             ->getResult();
     }
+
     // /**
     //  * @return ProductFixtures[] Returns an array of ProductFixtures objects
     //  */

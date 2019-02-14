@@ -65,21 +65,21 @@
                 {% for promotionProduct in promotions %}
                     <div class="product-block">
                         <a href="{{ path('app_product_page',
-                            {main_category: promotionProduct.mainCategory.slug,
-                                sub_category: promotionProduct.subCategory.slugSub,
-                                category: promotionProduct.category.slugCat,
-                                id: promotionProduct.id}) }}" class="img-block">
-                            <img src="images/products/{{ promotionProduct.img }}" alt="">
+                            {main_category: promotionProduct['slug'],
+                                sub_category: promotionProduct['slugSub'],
+                                category: promotionProduct['slugCat'],
+                                id: promotionProduct['id']}) }}" class="img-block">
+                            <img src="images/products/{{ promotionProduct['img'] }}" alt="">
                         </a>
                         <div class="product-block-info">
                             <a href="{{ path('app_product_page',
-                                {main_category: promotionProduct.mainCategory.slug,
-                                    sub_category: promotionProduct.subCategory.slugSub,
-                                    category: promotionProduct.category.slugCat,
-                                    id: promotionProduct.id}) }}" class="product-name">{{ promotionProduct.name }}</a>
+                                {main_category: promotionProduct['slug'],
+                                    sub_category: promotionProduct['slugSub'],
+                                    category: promotionProduct['slugCat'],
+                                    id: promotionProduct['id']}) }}" class="product-name">{{ promotionProduct['name'] }}</a>
                             <div class="product-price">
-                                <span class="promo-price">{{ promotionProduct.productVarieties[0].finalPrice }} лв.</span>
-                                <small>{{ promotionProduct.productVarieties[0].price }} лв.</small>
+                                <span class="promo-price">{{ promotionProduct['finalPrice'] }} лв.</span>
+                                <small>{{ promotionProduct['price'] }} лв.</small>
                             </div>
                         </div>
                     </div>
