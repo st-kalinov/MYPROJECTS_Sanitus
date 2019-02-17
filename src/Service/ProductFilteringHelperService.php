@@ -21,7 +21,7 @@ class ProductFilteringHelperService implements ProductFilteringHelperInterface
 
     public function getProductsForMainCategoryPage(MainCategory $mainCategory, $requestValues)
     {
-        $prices = $requestValues['price'] === null ? [1, 300] : $requestValues['price'];
+        $prices = $requestValues['price'] === null || empty($requestValues['price'])  ? [1, 300] : $requestValues['price'];
 
          $this->builder
             ->addInStockCriteria(true)
