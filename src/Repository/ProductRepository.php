@@ -4,8 +4,10 @@ namespace App\Repository;
 
 use App\Entity\MainCategory;
 use App\Entity\Product;
+use App\Service\ProductPaginatorService;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -16,6 +18,8 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class ProductRepository extends ServiceEntityRepository
 {
+    const PRODUCTS_PER_PAGE = 10;
+
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Product::class);
@@ -24,7 +28,7 @@ class ProductRepository extends ServiceEntityRepository
     public function getPromotionProductsByMainCategory(MainCategory $mainCategory)
     {
         return $this->createQueryBuilder('p')
-            ->select('p.id','p.name', 'p.img', 'pv.finalPrice', 'pv.price', 'pm.slug', 'ps.slugSub','pg.slugCat')
+            ->select('p.id', 'p.name', 'p.img', 'pv.finalPrice', 'pv.price', 'pm.slug', 'ps.slugSub', 'pg.slugCat')
             ->andWhere('p.mainCategory = :mainCat', 'pv.promotionCut != 0', 'p.instock = 1')
             ->join('p.mainCategory', 'pm')
             ->join('p.subCategory', 'ps')
@@ -35,11 +39,11 @@ class ProductRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function getProductsByMainCategoryWithCriteria($mainCategory, Criteria $criteria)
+    public function getProductsByMainCategoryWithCriteria($mainCategory, Criteria $criteria, int $page)
     {
 
         $qb = $this->createQueryBuilder('p');
-        return $qb
+        $qb
             ->andWhere('p.mainCategory = :mainCat')
             ->join('p.brand', 'pb')
             ->join('p.productVarieties', 'pv')
@@ -47,10 +51,66 @@ class ProductRepository extends ServiceEntityRepository
             ->addSelect('pv')
             ->addSelect('pb')
             ->setParameter('mainCat', $mainCategory)
-            ->getQuery()
-            ->getResult();
+            ->setMaxResults(self::PRODUCTS_PER_PAGE)
+            ->setFirstResult(($page - 1) * self::PRODUCTS_PER_PAGE);
+
+        $paginator = new Paginator($qb, $fetchJoinCollection = true);
+        $products = [];
+        foreach ($paginator as $post) {
+            $products[] = $post;
+        }
+
+        return $products;
     }
 
+    public function getCountOfProductPages_ByMainCategoryWithCriteria($mainCategory, Criteria $criteria)
+    {
+        $qb = $this->createQueryBuilder('p');
+        $qb
+            ->andWhere('p.mainCategory = :mainCat')
+            ->join('p.brand', 'pb')
+            ->join('p.productVarieties', 'pv')
+            ->addCriteria($criteria)
+            ->addSelect('pv')
+            ->addSelect('pb')
+            ->setParameter('mainCat', $mainCategory);
+
+        $paginator = new Paginator($qb, $fetchJoinCollection = true);
+        $pagesCount = count($paginator) / self::PRODUCTS_PER_PAGE;
+
+        return ceil($pagesCount);
+    }
+
+    public function getProductsByMainCategory($mainCategory)
+    {
+        $qb = $this->createQueryBuilder('p');
+        $qb
+            ->andWhere('p.mainCategory = :mainCat', 'p.instock = 1')
+            ->join('p.brand', 'pb')
+            ->join('p.productVarieties', 'pv')
+            ->addSelect('pv')
+            ->addSelect('pb')
+            ->setParameter('mainCat', $mainCategory)
+            ->setMaxResults(self::PRODUCTS_PER_PAGE);
+
+        $paginator = new Paginator($qb, true);
+        $paginatorService = new ProductPaginatorService($paginator);
+
+        return $paginatorService->getAllRecords();
+    }
+
+    public function getCountOfProductPages_ByMainCategory($mainCategory)
+    {
+        $qb = $this->createQueryBuilder('p');
+        $qb
+            ->andWhere('p.mainCategory = :mainCat', 'p.instock = 1')
+            ->setParameter('mainCat', $mainCategory);
+
+        $paginator = new Paginator($qb, true);
+        $paginatorService = new ProductPaginatorService($paginator);
+
+        return $paginatorService->getPagesCount(self::PRODUCTS_PER_PAGE);
+    }
     // /**
     //  * @return ProductFixtures[] Returns an array of ProductFixtures objects
     //  */

@@ -6,10 +6,12 @@ use App\Entity\MainCategory;
 use App\Entity\SubCategory;
 use App\Repository\ProductRepository;
 use App\Service\Interfaces\ProductFilteringHelperInterface;
+use http\Exception\InvalidArgumentException;
 
 
 class ProductFilteringHelperService implements ProductFilteringHelperInterface
 {
+    const PRICE = [1,300];
     protected $productRepository;
     protected $builder;
 
@@ -19,24 +21,27 @@ class ProductFilteringHelperService implements ProductFilteringHelperInterface
         $this->builder = $builder;
     }
 
-    public function getProductsForMainCategoryPage(MainCategory $mainCategory, $requestValues)
+    public function getFilteredProductsForMainCategoryPage(MainCategory $mainCategory, $requestValues)
     {
-        $prices = $requestValues['price'] === null || empty($requestValues['price'])  ? [1, 300] : $requestValues['price'];
+        if($requestValues === null) {
+            throw new InvalidArgumentException('Invalid filtering arguments');
+        }
+        $prices = $requestValues['price'] === null || empty($requestValues['price'])  ? self::PRICE : $requestValues['price'];
+        $page = $requestValues['page'];
 
-         $this->builder
+        $this->builder
             ->addInStockCriteria(true)
             ->addPriceCriteria($prices);
 
-        if($requestValues !== null && key_exists('brand', $requestValues) && !empty($requestValues['brand'])) {
-            $this->builder->addBrandsCriteria($requestValues['brand']);
-        }
-        if($requestValues !== null && key_exists('promotion', $requestValues)) {
-            $this->builder->addInPromotionCriteria();
-        }
+        $this->requestArgumentsChecker('brand', $requestValues) ? $this->builder->addBrandsCriteria($requestValues['brand']) : null;
+        $this->requestArgumentsChecker('promotion', $requestValues) ? $this->builder->addInPromotionCriteria() : null;
 
         $criteria = $this->builder->getCriteria();
 
-        return $this->productRepository->getProductsByMainCategoryWithCriteria($mainCategory, $criteria);
+        return [
+            'products' => $this->productRepository->getProductsByMainCategoryWithCriteria($mainCategory, $criteria, $page),
+            'pagesCount' => $this->productRepository->getCountOfProductPages_ByMainCategoryWithCriteria($mainCategory, $criteria)
+            ];
     }
 
     public function getProductsForMain_SubCategoryPage(MainCategory $mainCategory, SubCategory $subCategory)
@@ -48,4 +53,14 @@ class ProductFilteringHelperService implements ProductFilteringHelperInterface
     {
         // TODO: Implement getProductsForMain_Sub_CategoryPage() method.
     }
+
+    private function requestArgumentsChecker($key, $requestValues)
+    {
+        if(!key_exists($key, $requestValues) || empty($requestValues[$key])) {
+            return false;
+        }
+
+        return true;
+    }
+
 }

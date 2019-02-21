@@ -52,7 +52,7 @@ class ProductCriteriaBuilderService implements ProductCriteriaBuilderInterface
         return $this->criteria;
     }
 
-    protected static function makeField(string $alias, $column)
+    private static function makeField(string $alias, $column)
     {
         return sprintf("%s.%s", $alias, $column);
     }

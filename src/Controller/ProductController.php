@@ -19,31 +19,46 @@ use Symfony\Component\Routing\Annotation\Route;
 class ProductController extends AbstractController
 {
     /**
-     * @Route("/products/{slug}", name="app_products_maincategory", options = { "expose" = true })
+     * @Route("/products/{slug}", name="app_products_maincategory", methods={"GET"}, options = { "expose" = true })
      * @param MainCategory $mainCategory
-     * @param Request $request
-     * @param ProductFilteringHelperService $productFilter
-     * @param ProductCriteriaBuilderService $builder
      * @return Response
      */
-    public function getProductsByMainCategory(MainCategory $mainCategory, Request $request, ProductFilteringHelperService $productFilter)
+    public function getProductsByMainCategory(MainCategory $mainCategory, ProductRepository $productRepository)
     {
-        $q = json_decode($request->getContent(), true);
-
-        $products = $productFilter->getProductsForMainCategoryPage($mainCategory, $q);
-
+        $pagesCount = $productRepository->getCountOfProductPages_ByMainCategory($mainCategory);
+        $products = $productRepository->getProductsByMainCategory($mainCategory);
         $blocks = $this->renderView('product/product_block.html.twig', [
             'products' => $products,
+            'pagesCount' => $pagesCount
         ]);
-
-        if ($request->isXmlHttpRequest()) {
-            return new Response($blocks);
-        }
 
         return $this->render('product/allproducts_content.html.twig', [
             'mainCategory' => $mainCategory,
-            'blocks' => $blocks
+            'blocks' => $blocks,
         ]);
+    }
+
+    /**
+     * @Route("/products/{slug}", name="app_products_maincategory_filtered", methods={"POST"}, condition="request.isXmlHttpRequest()", options={ "expose" = true})
+     * @param MainCategory $mainCategory
+     * @param Request $request
+     * @param ProductFilteringHelperService $productFilter
+     * @return Response
+     */
+    public function getProductByMainCategoryFiltered(MainCategory $mainCategory, Request $request, ProductFilteringHelperService $productFilter)
+    {
+        $requestParams = json_decode($request->getContent(), true);
+        $filtered = $productFilter->getFilteredProductsForMainCategoryPage($mainCategory, $requestParams);
+
+        $products = $filtered['products'];
+        $pagesCount = $filtered['pagesCount'];
+
+        $blocks = $this->renderView('product/product_block.html.twig', [
+            'products' => $products,
+            'pagesCount' => $pagesCount
+        ]);
+
+        return new Response($blocks);
     }
 
     /**

@@ -60,14 +60,13 @@ div .row {
 
     #productFilterSection {
       div.options {
-        padding: 0 2rem;
+        padding: 0 0 0 0;
         div.option {
           width: 100%;
           display: flex;
-          padding-top: 1rem;
-          justify-content: space-around;
-
-
+          justify-content: center;
+          padding: 0.3rem 0;
+          align-items: baseline;
           div.input-block {
             text-align: right;
             width: 30%;
@@ -82,15 +81,15 @@ div .row {
           }
 
           div.label-input-block {
-            width: 70%;
-            text-align: center;
+            width: 50%;
             padding-left: 0.5rem;
 
             label {
-              display: table-cell;
+              width: 100%;
               font-family: 'Didact Gothic', sans-serif;
               cursor: pointer;
               font-size: 1.1rem;
+              text-align: left;
             }
           }
         }
@@ -101,5 +100,37 @@ div .row {
 
   div.products {
     margin-top: 2rem;
+
+    div.pagination-block {
+      ul {
+        li {
+          &.current-page, &.default-page {
+            color: red;
+          }
+          a {
+
+          }
+        }
+      }
+    }
+  }
+}
+
+
+@media (max-width: 991px) {
+  div .row #mainCatOptions #productFilterSection div.options div.option div.input-block {
+    width: 40%;
+  }
+  div .row #mainCatOptions #productFilterSection div.options div.option div.label-input-block {
+    width: 50%;
+  }
+}
+
+@media (max-width: 650px) {
+  div .row #mainCatOptions #productFilterSection div.options div.option div.input-block {
+    width: 35%;
+  }
+  div .row #mainCatOptions #productFilterSection div.options div.option div.label-input-block {
+    width: 50%;
   }
 }
