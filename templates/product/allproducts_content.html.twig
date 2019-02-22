@@ -2,8 +2,7 @@
 {% block javascripts %}
     {{ parent() }}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.0/js/ion.rangeSlider.min.js"></script>
-    <script src="{{ asset('js/pagination-client-side.js') }}"></script>
-    <script src="{{ asset('js/filtering.js') }}"></script>
+    <script src="{{ asset('js/transpiled-js/filtering.js') }}"></script>
 
 {% endblock %}
 {% block stylesheet %}

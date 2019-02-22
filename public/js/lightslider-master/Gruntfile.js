@@ -24,11 +24,11 @@ module.exports = function (grunt) {
             },
             basic: {
               src: ['src/js/<%= pkg.name %>.js'],
-              dest: 'dist/js/<%= pkg.name %>.js'
+              dest: 'transpiled-js/js/<%= pkg.name %>.js'
             },
             extras: {
               src: ['src/css/<%= pkg.name %>.css'],
-              dest: 'dist/css/<%= pkg.name %>.css'
+              dest: 'transpiled-js/css/<%= pkg.name %>.css'
             }
         },
         uglify: {
@@ -37,7 +37,7 @@ module.exports = function (grunt) {
             },
             dist: {
                 src: 'src/js/<%= pkg.name %>.js',
-                dest: 'dist/js/<%= pkg.name %>.min.js'
+                dest: 'transpiled-js/js/<%= pkg.name %>.min.js'
             }
         },
         cssmin: {
@@ -46,7 +46,7 @@ module.exports = function (grunt) {
                   expand: true,
                   cwd: 'src/css',
                   src: ['*.css', '!*.min.css'],
-                  dest: 'dist/css',
+                  dest: 'transpiled-js/css',
                   ext: '.min.css'
                 }]
             }
@@ -56,7 +56,7 @@ module.exports = function (grunt) {
                 expand: true,
                 cwd: 'src/img/',
                 src: ['**'],
-                dest: 'dist/img/'
+                dest: 'transpiled-js/img/'
             }
         },
         qunit: {
@@ -90,7 +90,7 @@ module.exports = function (grunt) {
             }
         },
         /*sass: {
-            dist: {
+            transpiled-js: {
                 options: { // Target options
                     style: 'expanded'
                 },
