@@ -1,13 +1,9 @@
 'use strict';
 
 $(document).ready(function () {
-    var mainCategorySlug = $('#mainCatOptions').find('h2.main-category:first').data('slug');
+    var mainCategorySlug = $('#Options').find('h2.main-category:first').data('slug');
     var route = Routing.generate('app_products_maincategory_filtered', { slug: mainCategorySlug }, true);
-    var brandBlockClass = "js-brand";
-    var priceBlockClass = "js-prices";
-    var promotionBlockClass = "js-promotion";
-    var paginationBlockClass = "js-pagination";
-    var activePage = 1;
+
     //-------------------------PRICE SLIDER ------------------------
     $(".js-range-slider").ionRangeSlider({
         type: "double",
@@ -56,7 +52,7 @@ $(document).ready(function () {
         var brand = get_filter(brandBlockClass, 'input:checkbox:checked');
         var prices = get_filter(priceBlockClass, 'input');
         var promotion = get_filter(promotionBlockClass, 'input:checkbox:checked');
-        console.log(prices);
+
         $.ajax({
             url: route,
             method: 'POST',
@@ -75,41 +71,6 @@ $(document).ready(function () {
                 $('.ajax-gif').hide();
             }
         });
-    }
-
-    function get_filter(className, inputType) {
-        var values = [];
-        $('.' + className + ' ' + inputType).each(function (index, element) {
-            values.push($(element).val());
-        });
-
-        return values;
-    }
-
-    function removeClassFromElements(parentElement, element, classNameForRemove) {
-        $('.' + parentElement + ' ' + element).each(function (index, element) {
-            $(element).removeClass(classNameForRemove);
-        });
-    }
-
-    function removeClassFromElement(parentElement, element, classNameForRemove) {
-        $('.' + parentElement + ' ' + element).removeClass(classNameForRemove);
-    }
-
-    function removeActivePageClass() {
-        removeClassFromElement(paginationBlockClass, "ul li", "default-page");
-        removeClassFromElements(paginationBlockClass, "ul li", "current-page");
-    }
-
-    function setActivePageClass(parentElement, element, elementNumber, classNameToAdd) {
-        $('.' + parentElement + ' ' + element + ':eq(' + (elementNumber - 1) + ')').addClass(classNameToAdd);
-    }
-
-    function clear_filters() {
-        $('#productFilterSection input:checkbox').each(function (index, element) {
-            $(element).prop('checked', false);
-        });
-        $(".js-range-slider").data('ionRangeSlider').update({ from: 0, to: 300 });
     }
 });
 //# sourceMappingURL=filtering.js.map

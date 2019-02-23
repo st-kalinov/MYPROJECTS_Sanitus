@@ -32,7 +32,7 @@ class ProductController extends AbstractController
             'pagesCount' => $pagesCount
         ]);
 
-        return $this->render('product/allproducts_content.html.twig', [
+        return $this->render('product/allproducts_maincategory_content.html.twig', [
             'mainCategory' => $mainCategory,
             'blocks' => $blocks,
         ]);
@@ -69,16 +69,23 @@ class ProductController extends AbstractController
         $mainCategorySlug = $request->attributes->get('slug');
         $subCategorySlug = $request->attributes->get('slugSub');
 
-        $mainCategory = $mainCategoryRepository->findBy(['slug' => $mainCategorySlug]);
-        $mainCategory = array_shift($mainCategory);
-        $subCategory = $subCategoryRepository->findBy(['mainCategory' => $mainCategory, 'slugSub' => $subCategorySlug]);
-        $subCategory = array_shift($subCategory);
+        $mainCategory = $mainCategoryRepository->findOneBy(['slug' => $mainCategorySlug]);
+        $subCategory = $subCategoryRepository->findOneBy(['mainCategory' => $mainCategory, 'slugSub' => $subCategorySlug]);
 
-        $products = $productRepository->findBy(['mainCategory' => $mainCategory, 'subCategory' => $subCategory]);
-        dump($mainCategory);
-        dump($subCategory);
-        dd($products);
 
+        $products = $productRepository->getProductsBy_MainCategory_SubCategory($mainCategory, $subCategory);
+        $pagesCount = $productRepository->getCountOfProductPages_ByMainCategory_SubCategory($mainCategory, $subCategory);
+
+        $blocks = $this->renderView('product/product_block.html.twig', [
+            'products' => $products,
+            'pagesCount' => $pagesCount
+        ]);
+
+        return $this->render('product/allproducts_subcategory_content.html.twig', [
+            'mainCategory' => $mainCategory,
+            'subCategory' => $subCategory,
+            'blocks' => $blocks,
+        ]);
     }
 
     /**

@@ -1,0 +1,48 @@
+<section id="productFilterSection">
+    <div class="filter-type-section">
+        <h2 class="attribute-name">Марки</h2>
+        <div class="options">
+            {% for brand in mainCategory.brand %}
+                <div class="option js-brand">
+                    <div class="input-block">
+                        <input id="optb{{ loop.index }}" type="checkbox" name="{{ brand.name }}"
+                               value="{{ brand.id }}">
+                    </div>
+                    <div class="label-input-block">
+                        <label for="optb{{ loop.index }}">{{ brand.name }}</label>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="filter-type-section">
+        <h2 class="attribute-name">Промоции</h2>
+        <div class="options">
+            <div class="option js-promotion">
+                <div class="input-block">
+                    <input id="optp1" type="checkbox" name="promotion" value="1">
+                </div>
+                <div class="label-input-block">
+                    <label for="optp1">Промоции</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="filter-type-section">
+        <h2 class="attribute-name">Цена<small>(от/до)</small></h2>
+        <div class="options">
+            <input type="text" class="js-range-slider" name="my_range" value=""
+                   data-min="0"
+                   data-max="300"
+                   data-from="0"
+                   data-to="300"
+                   data-grid="true"
+            />
+            <div class="js-prices">
+                <input type="hidden" class="js-price" name="minPrice" value="0">
+                <input type="hidden" class="js-price" name="maxPrice" value="300">
+            </div>
+        </div>
+    </div>
+    <button class="clear-filters">Изчисти</button>
+</section>

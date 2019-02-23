@@ -5,6 +5,7 @@ module.exports = function (grunt) {
     // Show elapsed time at the end
     require('time-grunt')(grunt);
 
+
     // Project configuration.
     grunt.initConfig({
         // Metadata.

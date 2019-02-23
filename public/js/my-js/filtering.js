@@ -1,11 +1,7 @@
 $(document).ready(function () {
-    const mainCategorySlug = $('#mainCatOptions').find('h2.main-category:first').data('slug');
+    const mainCategorySlug = $('#Options').find('h2.main-category:first').data('slug');
     const route = Routing.generate('app_products_maincategory_filtered', {slug: mainCategorySlug}, true);
-    const brandBlockClass = "js-brand";
-    const priceBlockClass = "js-prices";
-    const promotionBlockClass = "js-promotion";
-    const paginationBlockClass = "js-pagination";
-    var activePage = 1;
+
     //-------------------------PRICE SLIDER ------------------------
     $(".js-range-slider").ionRangeSlider({
         type: "double",
@@ -53,7 +49,7 @@ $(document).ready(function () {
         let brand = get_filter(brandBlockClass, 'input:checkbox:checked');
         let prices = get_filter(priceBlockClass, 'input');
         let promotion = get_filter(promotionBlockClass, 'input:checkbox:checked');
-        console.log(prices);
+
         $.ajax({
             url: route,
             method: 'POST',
@@ -73,42 +69,6 @@ $(document).ready(function () {
             }
         });
     }
-
-    function get_filter(className, inputType) {
-        let values = [];
-        $(`.${className} ${inputType}`).each((index, element) => {
-            values.push($(element).val());
-        });
-
-        return values;
-    }
-
-    function removeClassFromElements(parentElement, element, classNameForRemove) {
-        $(`.${parentElement} ${element}`).each((index, element) => {
-           $(element).removeClass(classNameForRemove);
-        });
-    }
-
-    function removeClassFromElement(parentElement, element, classNameForRemove) {
-        $(`.${parentElement} ${element}`).removeClass(classNameForRemove);
-    }
-
-    function removeActivePageClass() {
-        removeClassFromElement(paginationBlockClass, "ul li", "default-page");
-        removeClassFromElements(paginationBlockClass, "ul li", "current-page");
-    }
-
-    function setActivePageClass(parentElement, element, elementNumber, classNameToAdd) {
-        $(`.${parentElement} ${element}`+':eq('+(elementNumber-1)+')').addClass(classNameToAdd);
-    }
-
-    function clear_filters() {
-        $('#productFilterSection input:checkbox').each((index, element) => {
-            $(element).prop('checked', false);
-        });
-        $(".js-range-slider").data('ionRangeSlider').update({from: 0, to: 300});
-    }
-
 });
 
 

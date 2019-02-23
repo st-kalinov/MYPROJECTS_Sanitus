@@ -2,12 +2,13 @@
 {% block javascripts %}
     {{ parent() }}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.0/js/ion.rangeSlider.min.js"></script>
+    <script src="{{ asset('js/transpiled-js/all.js') }}"></script>
 
 {% endblock %}
 {% block stylesheet %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('css/product/filtering-aside-block.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/product/allProducts-subCat.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/product/allProducts-mainCat.css') }}">
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.0/css/ion.rangeSlider.min.css"/>
 {% endblock %}
@@ -18,11 +19,11 @@
         </div>
         <aside id="Options" class="col-lg-4 col-xl-3">
             <div class="filter-type-section">
-                <h2 class="attribute-name main-category" data-slug="{{ subCategory.slugSub }}">Тип {{ subCategory.name }}</h2>
+                <h2 class="attribute-name main-category" data-slug="{{ mainCategory.slug }}">Тип продукти</h2>
                 <div class="options">
-                    {% for category in subCategory.category %}
+                    {% for subcategory in mainCategory.subcategory %}
                         <div class="option main-sub-cat">
-                            <a href="{{ path('app_products_main_sub_category', {slug: mainCategory.slug, slugSub: subCategory.slugSub, slugCat: category.slugCat }) }}">{{ category.name }}</a>
+                            <a href="{{ path('app_products_main_subcategory', {slug: mainCategory.slug, slugSub: subcategory.slugSub }) }}">{{ subcategory.name }}</a>
                         </div>
                     {% endfor %}
                 </div>
@@ -34,5 +35,4 @@
             {{ blocks|raw }}
         </div>
     </div>
-
 {% endblock %}

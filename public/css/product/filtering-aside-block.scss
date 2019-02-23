@@ -1,0 +1,125 @@
+@import "../fonts-and-colors";
+div .row {
+  margin-top: 3rem;
+  position: relative;
+  div.ajax-gif {
+    width: 100%;
+    height: 100%;
+
+    background-color: rgba(238, 238, 238, 0.33);
+    z-index: 99999;
+    position:absolute;
+    display: none;
+    img {
+      position: fixed;
+
+      top: 40%;
+      left: 50%;
+    }
+
+  }
+
+  #Options {
+    min-height: 55rem;
+    padding: 0 2rem;
+
+    h2.attribute-name {
+      font-family: 'Lobster', cursive;
+      text-align: center;
+      border-bottom: 2px solid gainsboro;
+      margin-bottom: 3rem;
+      letter-spacing: 3px;
+      background-color: $navigation-hover-color;
+      padding: 1rem;
+    }
+
+    div.price-block {
+      display: flex;
+      justify-content: space-between;
+
+      div {
+        width: 40%;
+        text-align: center;
+      }
+    }
+
+    div.filter-type-section {
+      border: 1px solid gainsboro;
+      margin-bottom: 2rem;
+      padding-bottom: 3rem;
+      box-shadow: 9px 10px 2px -4px rgba(0,0,0,0.31);
+
+    }
+
+    #productFilterSection {
+      div.options {
+        padding: 0;
+        div.option {
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          padding: 0.3rem 0;
+          align-items: baseline;
+          div.input-block {
+            text-align: right;
+            width: 30%;
+            padding-top: 3px;
+
+            input {
+              cursor: pointer;
+              height: 1rem;
+              width: 1rem;
+              background-color: $navigation-hover-color;
+            }
+          }
+
+          div.label-input-block {
+            width: 50%;
+            padding-left: 0.5rem;
+
+            label {
+              width: 100%;
+              font-family: 'Didact Gothic', sans-serif;
+              cursor: pointer;
+              font-size: 1.1rem;
+              text-align: left;
+            }
+          }
+        }
+      }
+    }
+
+  }
+
+  div.products {
+    margin-top: 2rem;
+
+    div.pagination-block {
+      ul {
+        li {
+          &.current-page, &.default-page {
+            color: red;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 991px) {
+  div .row #Options #productFilterSection div.options div.option div.input-block {
+    width: 40%;
+  }
+  div .row #Options #productFilterSection div.options div.option div.label-input-block {
+    width: 50%;
+  }
+}
+
+@media (max-width: 650px) {
+  div .row #Options #productFilterSection div.options div.option div.input-block {
+    width: 35%;
+  }
+  div .row #Options #productFilterSection div.options div.option div.label-input-block {
+    width: 50%;
+  }
+}
