@@ -8,6 +8,6 @@ use App\Entity\SubCategory;
 
 interface ProductFilteringHelperInterface {
     public function getFilteredProductsForMainCategoryPage(MainCategory $mainCategory, $requestValues);
-    public function getProductsForMain_SubCategoryPage(MainCategory $mainCategory, SubCategory $subCategory);
-    public function getProductsForMain_Sub_CategoryPage(MainCategory $mainCategory, SubCategory $subCategory, Category $category );
+    public function getFilteredProductsForMain_SubCategoryPage(MainCategory $mainCategory, SubCategory $subCategory, $requestValues);
+    public function getFilteredProductsForMain_Sub_CategoryPage(MainCategory $mainCategory, SubCategory $subCategory, Category $category, $requestValues);
 }

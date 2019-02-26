@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Category;
 use App\Entity\MainCategory;
 use App\Entity\Product;
 use App\Entity\SubCategory;
@@ -26,7 +27,7 @@ class ProductRepository extends ServiceEntityRepository
         parent::__construct($registry, Product::class);
     }
 
-    public function getPromotionProductsByMainCategory(MainCategory $mainCategory)
+    public function getPromotionProductsBy_MainCat(MainCategory $mainCategory)
     {
         return $this->createQueryBuilder('p')
             ->select('p.id', 'p.name', 'p.img', 'pv.finalPrice', 'pv.price', 'pm.slug', 'ps.slugSub', 'pg.slugCat')
@@ -40,9 +41,50 @@ class ProductRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function getProductsByMainCategoryWithCriteria(MainCategory $mainCategory, Criteria $criteria, int $page)
+    public function getProductsBy_CategoryLevel(MainCategory $mainCategory, ?SubCategory $subCategory = null, ?Category $category = null)
     {
+        $qb = $this->createQueryBuilder('p');
+        $qb->andWhere('p.mainCategory = :mainCat', 'p.instock = 1');
 
+        if ($subCategory !== null)
+            $qb->andWhere('p.subCategory = :subCat')->setParameter('subCat', $subCategory);
+        if ($category !== null)
+            $qb->andWhere('p.category = :cat')->setParameter('cat', $category);
+
+        $qb
+            ->join('p.brand', 'pb')
+            ->join('p.productVarieties', 'pv')
+            ->addSelect('pv')
+            ->addSelect('pb')
+            ->setParameter('mainCat', $mainCategory)
+            ->setMaxResults(self::PRODUCTS_PER_PAGE);
+
+        $paginator = new Paginator($qb, true);
+        $paginatorService = new ProductPaginatorService($paginator);
+
+        return $paginatorService->getAllRecords();
+    }
+
+    public function getCountOfProductPagesBy_CategoryLevel(MainCategory $mainCategory, ?SubCategory $subCategory = null, ?Category $category = null)
+    {
+        $qb = $this->createQueryBuilder('p');
+        $qb->andWhere('p.mainCategory = :mainCat', 'p.instock = 1');
+
+        if ($subCategory !== null)
+            $qb->andWhere('p.subCategory = :subCat')->setParameter('subCat', $subCategory);
+        if ($category !== null)
+            $qb->andWhere('p.category = :cat')->setParameter('cat', $category);
+
+        $qb->setParameter('mainCat', $mainCategory);
+
+        $paginator = new Paginator($qb, true);
+        $paginatorService = new ProductPaginatorService($paginator);
+
+        return $paginatorService->getPagesCount(self::PRODUCTS_PER_PAGE);
+    }
+
+    public function getProductsBy_MainCatWithCriteria(MainCategory $mainCategory, Criteria $criteria, int $page)
+    {
         $qb = $this->createQueryBuilder('p');
         $qb
             ->andWhere('p.mainCategory = :mainCat')
@@ -56,15 +98,12 @@ class ProductRepository extends ServiceEntityRepository
             ->setFirstResult(($page - 1) * self::PRODUCTS_PER_PAGE);
 
         $paginator = new Paginator($qb, $fetchJoinCollection = true);
-        $products = [];
-        foreach ($paginator as $post) {
-            $products[] = $post;
-        }
+        $paginatorService = new ProductPaginatorService($paginator);
 
-        return $products;
+        return $paginatorService->getAllRecords();
     }
 
-    public function getCountOfProductPages_ByMainCategoryWithCriteria(MainCategory $mainCategory, Criteria $criteria)
+    public function getCountOfProductPagesBy_MainCategoryWithCriteria(MainCategory $mainCategory, Criteria $criteria)
     {
         $qb = $this->createQueryBuilder('p');
         $qb
@@ -77,70 +116,88 @@ class ProductRepository extends ServiceEntityRepository
             ->setParameter('mainCat', $mainCategory);
 
         $paginator = new Paginator($qb, $fetchJoinCollection = true);
-        $pagesCount = count($paginator) / self::PRODUCTS_PER_PAGE;
-
-        return ceil($pagesCount);
-    }
-
-    public function getProductsByMainCategory(MainCategory $mainCategory)
-    {
-        $qb = $this->createQueryBuilder('p');
-        $qb
-            ->andWhere('p.mainCategory = :mainCat', 'p.instock = 1')
-            ->join('p.brand', 'pb')
-            ->join('p.productVarieties', 'pv')
-            ->addSelect('pv')
-            ->addSelect('pb')
-            ->setParameter('mainCat', $mainCategory)
-            ->setMaxResults(self::PRODUCTS_PER_PAGE);
-
-        $paginator = new Paginator($qb, true);
-        $paginatorService = new ProductPaginatorService($paginator);
-
-        return $paginatorService->getAllRecords();
-    }
-
-    public function getCountOfProductPages_ByMainCategory(MainCategory $mainCategory)
-    {
-        $qb = $this->createQueryBuilder('p');
-        $qb
-            ->andWhere('p.mainCategory = :mainCat', 'p.instock = 1')
-            ->setParameter('mainCat', $mainCategory);
-
-        $paginator = new Paginator($qb, true);
         $paginatorService = new ProductPaginatorService($paginator);
 
         return $paginatorService->getPagesCount(self::PRODUCTS_PER_PAGE);
     }
 
-    public function getProductsBy_MainCategory_SubCategory(MainCategory $mainCategory, SubCategory $subCategory)
+    public function getProductsBy_MainCat_SubCatWithCriteria(MainCategory $mainCategory, SubCategory $subCategory, Criteria $criteria, int $page)
     {
         $qb = $this->createQueryBuilder('p');
         $qb
-            ->andWhere('p.mainCategory = :mainCat', 'p.subCategory = :subCat', 'p.instock = 1')
+            ->andWhere('p.mainCategory = :mainCat', 'p.subCategory = :subCat')
             ->join('p.brand', 'pb')
             ->join('p.productVarieties', 'pv')
+            ->addCriteria($criteria)
             ->addSelect('pv')
             ->addSelect('pb')
             ->setParameter('mainCat', $mainCategory)
             ->setParameter('subCat', $subCategory)
-            ->setMaxResults(self::PRODUCTS_PER_PAGE);
+            ->setMaxResults(self::PRODUCTS_PER_PAGE)
+            ->setFirstResult(($page - 1) * self::PRODUCTS_PER_PAGE);
 
-        $paginator = new Paginator($qb, true);
+        $paginator = new Paginator($qb, $fetchJoinCollection = true);
         $paginatorService = new ProductPaginatorService($paginator);
 
         return $paginatorService->getAllRecords();
     }
 
-    public function getCountOfProductPages_ByMainCategory_SubCategory(MainCategory $mainCategory, SubCategory $subCategory)
+    public function getCountOfProductPagesBy_MainCat_SubCatWithCriteria(MainCategory $mainCategory, SubCategory $subCategory, Criteria $criteria)
     {
         $qb = $this->createQueryBuilder('p');
         $qb
-            ->andWhere('p.mainCategory = :mainCat', 'p.subCategory = :subCat', 'p.instock = 1')
+            ->andWhere('p.mainCategory = :mainCat', 'p.subCategory = :subCat')
+            ->join('p.brand', 'pb')
+            ->join('p.productVarieties', 'pv')
+            ->addCriteria($criteria)
+            ->addSelect('pv')
+            ->addSelect('pb')
             ->setParameter('mainCat', $mainCategory)
             ->setParameter('subCat', $subCategory);
 
-        $paginator = new Paginator($qb, true);
+        $paginator = new Paginator($qb, $fetchJoinCollection = true);
+        $paginatorService = new ProductPaginatorService($paginator);
+
+        return $paginatorService->getPagesCount(self::PRODUCTS_PER_PAGE);
+    }
+
+    public function getProductsBy_MainCat_SubCat_CatWithCriteria(MainCategory $mainCategory, SubCategory $subCategory, Category $category, Criteria $criteria, int $page)
+    {
+        $qb = $this->createQueryBuilder('p');
+        $qb
+            ->andWhere('p.mainCategory = :mainCat', 'p.subCategory = :subCat', 'p.category = :cat')
+            ->join('p.brand', 'pb')
+            ->join('p.productVarieties', 'pv')
+            ->addCriteria($criteria)
+            ->addSelect('pv')
+            ->addSelect('pb')
+            ->setParameter('mainCat', $mainCategory)
+            ->setParameter('subCat', $subCategory)
+            ->setParameter('cat', $category)
+            ->setMaxResults(self::PRODUCTS_PER_PAGE)
+            ->setFirstResult(($page - 1) * self::PRODUCTS_PER_PAGE);
+
+        $paginator = new Paginator($qb, $fetchJoinCollection = true);
+        $paginatorService = new ProductPaginatorService($paginator);
+
+        return $paginatorService->getAllRecords();
+    }
+
+    public function getCountOfProductPagesBy_MainCat_SubCat_CatWithCriteria(MainCategory $mainCategory, SubCategory $subCategory, Category $category, Criteria $criteria)
+    {
+        $qb = $this->createQueryBuilder('p');
+        $qb
+            ->andWhere('p.mainCategory = :mainCat', 'p.subCategory = :subCat', 'p.category = :cat')
+            ->join('p.brand', 'pb')
+            ->join('p.productVarieties', 'pv')
+            ->addCriteria($criteria)
+            ->addSelect('pv')
+            ->addSelect('pb')
+            ->setParameter('mainCat', $mainCategory)
+            ->setParameter('subCat', $subCategory)
+            ->setParameter('cat', $category);
+
+        $paginator = new Paginator($qb, $fetchJoinCollection = true);
         $paginatorService = new ProductPaginatorService($paginator);
 
         return $paginatorService->getPagesCount(self::PRODUCTS_PER_PAGE);

@@ -23,10 +23,10 @@ class ProductController extends AbstractController
      * @param MainCategory $mainCategory
      * @return Response
      */
-    public function getProductsByMainCategory(MainCategory $mainCategory, ProductRepository $productRepository)
+    public function getProductsBy_MainCat(MainCategory $mainCategory, ProductRepository $productRepository)
     {
-        $pagesCount = $productRepository->getCountOfProductPages_ByMainCategory($mainCategory);
-        $products = $productRepository->getProductsByMainCategory($mainCategory);
+        $pagesCount = $productRepository->getCountOfProductPagesBy_CategoryLevel($mainCategory);
+        $products = $productRepository->getProductsBy_CategoryLevel($mainCategory);
         $blocks = $this->renderView('product/product_block.html.twig', [
             'products' => $products,
             'pagesCount' => $pagesCount
@@ -45,7 +45,7 @@ class ProductController extends AbstractController
      * @param ProductFilteringHelperService $productFilter
      * @return Response
      */
-    public function getProductByMainCategoryFiltered(MainCategory $mainCategory, Request $request, ProductFilteringHelperService $productFilter)
+    public function getProductBy_MainCatFiltered(MainCategory $mainCategory, Request $request, ProductFilteringHelperService $productFilter)
     {
         $requestParams = json_decode($request->getContent(), true);
         $filtered = $productFilter->getFilteredProductsForMainCategoryPage($mainCategory, $requestParams);
@@ -62,9 +62,12 @@ class ProductController extends AbstractController
     }
 
     /**
-     * @Route("/products/{slug}/{slugSub}", name="app_products_main_subcategory", options={ "expose" = true })
+     * @Route("/products/{slug}/{slugSub}", name="app_products_main_subcategory", methods={"GET"}, options={ "expose" = true })
      */
-    public function getProductsByMain_SubCategory(Request $request, MainCategoryRepository $mainCategoryRepository, SubCategoryRepository $subCategoryRepository, ProductRepository $productRepository)
+    public function getProductsBy_MainCat_SubCat(Request $request,
+                                                 MainCategoryRepository $mainCategoryRepository,
+                                                 SubCategoryRepository $subCategoryRepository,
+                                                 ProductRepository $productRepository)
     {
         $mainCategorySlug = $request->attributes->get('slug');
         $subCategorySlug = $request->attributes->get('slugSub');
@@ -72,9 +75,8 @@ class ProductController extends AbstractController
         $mainCategory = $mainCategoryRepository->findOneBy(['slug' => $mainCategorySlug]);
         $subCategory = $subCategoryRepository->findOneBy(['mainCategory' => $mainCategory, 'slugSub' => $subCategorySlug]);
 
-
-        $products = $productRepository->getProductsBy_MainCategory_SubCategory($mainCategory, $subCategory);
-        $pagesCount = $productRepository->getCountOfProductPages_ByMainCategory_SubCategory($mainCategory, $subCategory);
+        $products = $productRepository->getProductsBy_CategoryLevel($mainCategory, $subCategory);
+        $pagesCount = $productRepository->getCountOfProductPagesBy_CategoryLevel($mainCategory, $subCategory);
 
         $blocks = $this->renderView('product/product_block.html.twig', [
             'products' => $products,
@@ -89,29 +91,100 @@ class ProductController extends AbstractController
     }
 
     /**
-     * @Route("/products/{slug}/{slugSub}/{slugCat}", name="app_products_main_sub_category", options={"expose" = true})
+     * @Route("/products/{slug}/{slugSub}", name="app_products_main_subcategory_filtered", methods={"POST"}, condition="request.isXmlHttpRequest()", options={ "expose" = true})
      */
-    public function getProductsByMain_Sub_Category(Request $request, MainCategoryRepository $mainCategoryRepository, SubCategoryRepository $subCategoryRepository, ProductRepository $productRepository, CategoryRepository $categoryRepository)
+    public function getProductsBy_MainCat_SubCatFiltered(Request $request,
+                                                         MainCategoryRepository $mainCategoryRepository,
+                                                         SubCategoryRepository $subCategoryRepository,
+                                                         ProductFilteringHelperService $productFilter)
+    {
+        $mainCategorySlug = $request->attributes->get('slug');
+        $subCategorySlug = $request->attributes->get('slugSub');
+
+        $mainCategory = $mainCategoryRepository->findOneBy(['slug' => $mainCategorySlug]);
+        $subCategory = $subCategoryRepository->findOneBy(['mainCategory' => $mainCategory, 'slugSub' => $subCategorySlug]);
+
+        $requestParams = json_decode($request->getContent(), true);
+        $filtered = $productFilter->getFilteredProductsForMain_SubCategoryPage($mainCategory, $subCategory, $requestParams);
+
+        $products = $filtered['products'];
+        $pagesCount = $filtered['pagesCount'];
+
+
+        $blocks = $this->renderView('product/product_block.html.twig', [
+            'products' => $products,
+            'pagesCount' => $pagesCount
+        ]);
+
+        return new Response($blocks);
+    }
+
+    /**
+     * @Route("/products/{slug}/{slugSub}/{slugCat}", name="app_products_main_sub_category", methods={"GET"}, options={"expose" = true})
+     */
+    public function getProductsBy_MainCat_SubCat_Cat(Request $request,
+                                                     MainCategoryRepository $mainCategoryRepository,
+                                                     SubCategoryRepository $subCategoryRepository,
+                                                     CategoryRepository $categoryRepository,
+                                                     ProductRepository $productRepository)
     {
         $mainCategorySlug = $request->attributes->get('slug');
         $subCategorySlug = $request->attributes->get('slugSub');
         $categorySlug = $request->attributes->get('slugCat');
 
-        $mainCategory = $mainCategoryRepository->findBy(['slug' => $mainCategorySlug]);
-        $mainCategory = array_shift($mainCategory);
-        $subCategory = $subCategoryRepository->findBy(['mainCategory' => $mainCategory, 'slugSub' => $subCategorySlug]);
-        $subCategory = array_shift($subCategory);
-        $category = $categoryRepository->findBy(['mainCategory' => $mainCategory, 'subCategory' => $subCategory, 'slugCat' => $categorySlug]);
-        $category = array_shift($category);
+        $mainCategory = $mainCategoryRepository->findOneBy(['slug' => $mainCategorySlug]);
+        $subCategory = $subCategoryRepository->findOneBy(['mainCategory' => $mainCategory, 'slugSub' => $subCategorySlug]);
+        $category = $categoryRepository->findOneBy(['mainCategory' => $mainCategory, 'subCategory' => $subCategory, 'slugCat' => $categorySlug]);
 
-        $products = $productRepository->findBy(['mainCategory' => $mainCategory, 'subCategory' => $subCategory, 'category' => $category]);
 
-        dump($mainCategory);
-        dump($subCategory);
-        dump($category);
-        dd($products);
+        $products = $productRepository->getProductsBy_CategoryLevel($mainCategory, $subCategory, $category);
+        $pagesCount = $productRepository->getCountOfProductPagesBy_CategoryLevel($mainCategory, $subCategory, $category);
+
+        $blocks = $this->renderView('product/product_block.html.twig', [
+            'products' => $products,
+            'pagesCount' => $pagesCount
+        ]);
+
+        return $this->render('product/allproducts_category_content.html.twig', [
+           'mainCategory' => $mainCategory,
+           'subCategory' => $subCategory,
+           'category' => $category,
+           'blocks' => $blocks
+        ]);
+
     }
 
+    /**
+     * @Route("/products/{slug}/{slugSub}/{slugCat}", name="app_products_main_sub_category_filtered", methods={"POST"}, condition="request.isXmlHttpRequest()", options={ "expose" = true})
+     */
+    public function getProductsBy_MainCat_SubCat_CatFiltered(Request $request,
+                                                             MainCategoryRepository $mainCategoryRepository,
+                                                             SubCategoryRepository $subCategoryRepository,
+                                                             CategoryRepository $categoryRepository,
+                                                             ProductFilteringHelperService $productFilter)
+    {
+        $mainCategorySlug = $request->attributes->get('slug');
+        $subCategorySlug = $request->attributes->get('slugSub');
+        $categorySlug = $request->attributes->get('slugCat');
+
+        $mainCategory = $mainCategoryRepository->findOneBy(['slug' => $mainCategorySlug]);
+        $subCategory = $subCategoryRepository->findOneBy(['mainCategory' => $mainCategory, 'slugSub' => $subCategorySlug]);
+        $category = $categoryRepository->findOneBy(['mainCategory' => $mainCategory, 'subCategory' => $subCategory, 'slugCat' => $categorySlug]);
+
+        $requestParams = json_decode($request->getContent(), true);
+        $filtered = $productFilter->getFilteredProductsForMain_Sub_CategoryPage($mainCategory, $subCategory, $category, $requestParams);
+
+        $products = $filtered['products'];
+        $pagesCount = $filtered['pagesCount'];
+
+
+        $blocks = $this->renderView('product/product_block.html.twig', [
+            'products' => $products,
+            'pagesCount' => $pagesCount
+        ]);
+
+        return new Response($blocks);
+    }
     /**
      * @Route("/products/{main_category}/{sub_category}/{category}/{id}", name="app_product_page")
      * @param ProductRepository $productRepository

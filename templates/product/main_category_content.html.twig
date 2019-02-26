@@ -2,12 +2,12 @@
 {% block stylesheet %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('css/product/main-category.css') }}">
-    <link type="text/css" rel="stylesheet" href="{{ asset('js/lightslider-master/dist/css/lightslider.css') }}"/>
+    <link type="text/css" rel="stylesheet" href="{{ asset('js/libraries/lightslider-master/dist/css/lightslider.css') }}"/>
 {% endblock %}
 {% block title %}Зоомагазин Онлайн, храни и аксесоари за домани любимци | Санитус{% endblock %}
 {% block javascripts %}
     {{ parent() }}
-    <script src="../{{ asset('js/lightslider-master/src/js/lightslider.js') }}"></script>
+    <script src="../{{ asset('js/libraries/lightslider-master/src/js/lightslider.js') }}"></script>
     <script>
         $(document).ready(function () {
             $("#lightSlider").lightSlider({

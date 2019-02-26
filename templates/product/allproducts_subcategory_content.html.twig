@@ -2,7 +2,7 @@
 {% block javascripts %}
     {{ parent() }}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.0/js/ion.rangeSlider.min.js"></script>
-
+    <script src="{{ asset('js/transpiled-js/all_subCat.js') }}"></script>
 {% endblock %}
 {% block stylesheet %}
     {{ parent() }}
@@ -18,7 +18,7 @@
         </div>
         <aside id="Options" class="col-lg-4 col-xl-3">
             <div class="filter-type-section">
-                <h2 class="attribute-name main-category" data-slug="{{ subCategory.slugSub }}">Тип {{ subCategory.name }}</h2>
+                <h2 class="attribute-name main-category" data-slug="{{ mainCategory.slug }}" data-sub-slug="{{ subCategory.slugSub }}">Тип {{ subCategory.name }}</h2>
                 <div class="options">
                     {% for category in subCategory.category %}
                         <div class="option main-sub-cat">

@@ -1,8 +1,8 @@
-'use strict';
-
 $(document).ready(function () {
-    var mainCategorySlug = $('#Options').find('h2.main-category:first').data('slug');
-    var route = Routing.generate('app_products_maincategory_filtered', { slug: mainCategorySlug }, true);
+    const mainCategorySlug = $('#Options').find('h2.main-category:first').data('slug');
+    const subCategorySlug = $('#Options').find('h2.main-category:first').data('sub-slug');
+    const categorySlug = $('#Options').find('h2.main-category:first').data('cat-slug');
+    const route = Routing.generate('app_products_main_sub_category_filtered', {slug: mainCategorySlug, slugSub: subCategorySlug, slugCat: categorySlug }, true);
 
     //-------------------------PRICE SLIDER ------------------------
     $(".js-range-slider").ionRangeSlider({
@@ -15,13 +15,13 @@ $(document).ready(function () {
         grid: true,
         grid_num: 2,
         hide_min_max: true,
-        onFinish: function onFinish(data) {
+        onFinish: (data) => {
             $('.js-price[name="minPrice"]').val(data.from);
             $('.js-price[name="maxPrice"]').val(data.to);
             activePage = 1;
             makeAJAX();
         },
-        onUpdate: function onUpdate(data) {
+        onUpdate: (data) => {
             $('.js-price[name="minPrice"]').val(data.from);
             $('.js-price[name="maxPrice"]').val(data.to);
             activePage = 1;
@@ -31,46 +31,44 @@ $(document).ready(function () {
     //--------------------PRICE SLIDER END---------------------------
 
 
-    $('#productFilterSection input:checkbox').on('click', function () {
+    $('#productFilterSection input:checkbox').on('click', () => {
         activePage = 1;
         makeAJAX();
     });
 
-    $('body').on('click', 'div.' + paginationBlockClass + ' ul li', function (e) {
+    $('body').on('click', `div.${paginationBlockClass} ul li`, (e) => {
         e.preventDefault();
         activePage = $(e.currentTarget).data("page");
         makeAJAX(activePage);
+
     });
 
-    $('.clear-filters').on('click', function () {
+    $('.clear-filters').on('click', () => {
         clear_filters();
     });
 
-    function makeAJAX() {
-        var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
-
-        var brand = get_filter(brandBlockClass, 'input:checkbox:checked');
-        var prices = get_filter(priceBlockClass, 'input');
-        var promotion = get_filter(promotionBlockClass, 'input:checkbox:checked');
+    function makeAJAX(page = 1) {
+        let brand = get_filter(brandBlockClass, 'input:checkbox:checked');
+        let prices = get_filter(priceBlockClass, 'input');
+        let promotion = get_filter(promotionBlockClass, 'input:checkbox:checked');
 
         $.ajax({
             url: route,
             method: 'POST',
             contentType: 'application/json',
-            data: JSON.stringify({ brand: brand, price: prices, promotion: promotion, page: page }),
-            beforeSend: function beforeSend() {
+            data: JSON.stringify({brand: brand, price: prices, promotion: promotion, page: page}),
+            beforeSend: () => {
                 $('.ajax-gif').show();
             },
-            success: function success(data) {
+            success: function (data) {
                 $('.ajax-gif').hide();
                 $('.products').html(data);
                 removeActivePageClass();
-                setActivePageClass(paginationBlockClass, "ul li", activePage, "current-page");
+                setActivePageClass(paginationBlockClass, "ul li", activePage,"current-page");
             },
-            error: function error() {
+            error: function () {
                 $('.ajax-gif').hide();
             }
         });
     }
 });
-//# sourceMappingURL=filtering.js.map

@@ -1,0 +1,12 @@
+#Options {
+  div.main-sub-cat {
+    text-align: center;
+    margin: 0.5rem 0;
+    font-weight: bold;
+
+    a.active-cat {
+      font-weight: bold;
+      background-color: red;
+    }
+  }
+}

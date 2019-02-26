@@ -28,7 +28,7 @@ class MainController extends AbstractController
     public function main_category(MainCategory $mainCategory, ProductRepository $productRepository)
     {
 
-       $promotionProducts = $productRepository->getPromotionProductsByMainCategory($mainCategory);
+       $promotionProducts = $productRepository->getPromotionProductsBy_MainCat($mainCategory);
 
         return $this->render('product/main_category_content.html.twig', [
             'mainCategory' => $mainCategory,

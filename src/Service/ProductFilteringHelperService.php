@@ -39,19 +39,55 @@ class ProductFilteringHelperService implements ProductFilteringHelperInterface
         $criteria = $this->builder->getCriteria();
 
         return [
-            'products' => $this->productRepository->getProductsByMainCategoryWithCriteria($mainCategory, $criteria, $page),
-            'pagesCount' => $this->productRepository->getCountOfProductPages_ByMainCategoryWithCriteria($mainCategory, $criteria)
+            'products' => $this->productRepository->getProductsBy_MainCatWithCriteria($mainCategory, $criteria, $page),
+            'pagesCount' => $this->productRepository->getCountOfProductPagesBy_MainCategoryWithCriteria($mainCategory, $criteria)
             ];
     }
 
-    public function getProductsForMain_SubCategoryPage(MainCategory $mainCategory, SubCategory $subCategory)
+    public function getFilteredProductsForMain_SubCategoryPage(MainCategory $mainCategory, SubCategory $subCategory, $requestValues)
     {
-        // TODO: Implement getProductsForMain_SubCategoryPage() method.
+        if($requestValues === null) {
+            throw new InvalidArgumentException('Invalid filtering arguments');
+        }
+        $prices = $requestValues['price'] === null || empty($requestValues['price'])  ? self::PRICE : $requestValues['price'];
+        $page = $requestValues['page'];
+
+        $this->builder
+            ->addInStockCriteria(true)
+            ->addPriceCriteria($prices);
+
+        $this->requestArgumentsChecker('brand', $requestValues) ? $this->builder->addBrandsCriteria($requestValues['brand']) : null;
+        $this->requestArgumentsChecker('promotion', $requestValues) ? $this->builder->addInPromotionCriteria() : null;
+
+        $criteria = $this->builder->getCriteria();
+
+        return [
+            'products' => $this->productRepository->getProductsBy_MainCat_SubCatWithCriteria($mainCategory, $subCategory, $criteria, $page),
+            'pagesCount' => $this->productRepository->getCountOfProductPagesBy_MainCat_SubCatWithCriteria($mainCategory, $subCategory, $criteria)
+        ];
     }
 
-    public function getProductsForMain_Sub_CategoryPage(MainCategory $mainCategory, SubCategory $subCategory, Category $category)
+    public function getFilteredProductsForMain_Sub_CategoryPage(MainCategory $mainCategory, SubCategory $subCategory, Category $category, $requestValues)
     {
-        // TODO: Implement getProductsForMain_Sub_CategoryPage() method.
+        if($requestValues === null) {
+            throw new InvalidArgumentException('Invalid filtering arguments');
+        }
+        $prices = $requestValues['price'] === null || empty($requestValues['price'])  ? self::PRICE : $requestValues['price'];
+        $page = $requestValues['page'];
+
+        $this->builder
+            ->addInStockCriteria(true)
+            ->addPriceCriteria($prices);
+
+        $this->requestArgumentsChecker('brand', $requestValues) ? $this->builder->addBrandsCriteria($requestValues['brand']) : null;
+        $this->requestArgumentsChecker('promotion', $requestValues) ? $this->builder->addInPromotionCriteria() : null;
+
+        $criteria = $this->builder->getCriteria();
+
+        return [
+            'products' => $this->productRepository->getProductsBy_MainCat_SubCat_CatWithCriteria($mainCategory, $subCategory, $category, $criteria, $page),
+            'pagesCount' => $this->productRepository->getCountOfProductPagesBy_MainCat_SubCat_CatWithCriteria($mainCategory, $subCategory, $category, $criteria)
+        ];
     }
 
     private function requestArgumentsChecker($key, $requestValues)
