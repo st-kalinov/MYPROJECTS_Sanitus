@@ -2,7 +2,7 @@
     <div class="filter-type-section">
         <h2 class="attribute-name">Марки</h2>
         <div class="options">
-            {% for brand in mainCategory.brand %}
+            {% for brand in brands %}
                 <div class="option js-brand">
                     <div class="input-block">
                         <input id="optb{{ loop.index }}" type="checkbox" name="{{ brand.name }}"

@@ -7,7 +7,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 
 class BrandFixtures extends BaseFixture
 {
-    private static $brands = ['Royal Canin', 'Brit', 'Purina Pro Plan', 'Orijen', 'Tetra'];
+    private static $brands = ['Royal Canin', 'Brit', 'Purina Pro Plan', 'Pedigree', 'Orijen', 'Ferplast', 'My Dog', 'Tetra'];
     protected function loadData(ObjectManager $manager)
     {
         $this->createMany(Brand::class, count(self::$brands), function (Brand $brand, $i) {

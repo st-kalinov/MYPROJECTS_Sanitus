@@ -27,13 +27,16 @@ class ProductController extends AbstractController
     {
         $pagesCount = $productRepository->getCountOfProductPagesBy_CategoryLevel($mainCategory);
         $products = $productRepository->getProductsBy_CategoryLevel($mainCategory);
+        $brands = $productRepository->getProductsBrandsBy_CategoryLevel($mainCategory);
+
         $blocks = $this->renderView('product/product_block.html.twig', [
             'products' => $products,
-            'pagesCount' => $pagesCount
+            'pagesCount' => $pagesCount,
         ]);
 
         return $this->render('product/allproducts_maincategory_content.html.twig', [
             'mainCategory' => $mainCategory,
+            'brands' => $brands,
             'blocks' => $blocks,
         ]);
     }
@@ -77,6 +80,7 @@ class ProductController extends AbstractController
 
         $products = $productRepository->getProductsBy_CategoryLevel($mainCategory, $subCategory);
         $pagesCount = $productRepository->getCountOfProductPagesBy_CategoryLevel($mainCategory, $subCategory);
+        $brands = $productRepository->getProductsBrandsBy_CategoryLevel($mainCategory, $subCategory);
 
         $blocks = $this->renderView('product/product_block.html.twig', [
             'products' => $products,
@@ -86,6 +90,7 @@ class ProductController extends AbstractController
         return $this->render('product/allproducts_subcategory_content.html.twig', [
             'mainCategory' => $mainCategory,
             'subCategory' => $subCategory,
+            'brands' => $brands,
             'blocks' => $blocks,
         ]);
     }
@@ -139,6 +144,7 @@ class ProductController extends AbstractController
 
         $products = $productRepository->getProductsBy_CategoryLevel($mainCategory, $subCategory, $category);
         $pagesCount = $productRepository->getCountOfProductPagesBy_CategoryLevel($mainCategory, $subCategory, $category);
+        $brands = $productRepository->getProductsBrandsBy_CategoryLevel($mainCategory, $subCategory, $category);
 
         $blocks = $this->renderView('product/product_block.html.twig', [
             'products' => $products,
@@ -149,6 +155,7 @@ class ProductController extends AbstractController
            'mainCategory' => $mainCategory,
            'subCategory' => $subCategory,
            'category' => $category,
+           'brands' => $brands,
            'blocks' => $blocks
         ]);
 

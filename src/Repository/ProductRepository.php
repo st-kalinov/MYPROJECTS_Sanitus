@@ -65,6 +65,25 @@ class ProductRepository extends ServiceEntityRepository
         return $paginatorService->getAllRecords();
     }
 
+    public function getProductsBrandsBy_CategoryLevel(MainCategory $mainCategory, ?SubCategory $subCategory = null, ?Category $category = null)
+    {
+        $qb = $this->createQueryBuilder('p');
+        $qb
+            ->distinct()
+            ->select('pb.name', 'pb.id')
+            ->andWhere('p.mainCategory = :mainCat', 'p.instock = 1');
+
+        if ($subCategory !== null)
+            $qb->andWhere('p.subCategory = :subCat')->setParameter('subCat', $subCategory);
+        if ($category !== null)
+            $qb->andWhere('p.category = :cat')->setParameter('cat', $category);
+
+       return $qb
+            ->join('p.brand', 'pb')
+            ->setParameter('mainCat', $mainCategory)
+            ->getQuery()
+            ->getResult();
+    }
     public function getCountOfProductPagesBy_CategoryLevel(MainCategory $mainCategory, ?SubCategory $subCategory = null, ?Category $category = null)
     {
         $qb = $this->createQueryBuilder('p');
@@ -82,6 +101,8 @@ class ProductRepository extends ServiceEntityRepository
 
         return $paginatorService->getPagesCount(self::PRODUCTS_PER_PAGE);
     }
+
+    /** ------------------------------------------------ MAIN CATEGORY CRITERIA  ------------------------------------------------ */
 
     public function getProductsBy_MainCatWithCriteria(MainCategory $mainCategory, Criteria $criteria, int $page)
     {
@@ -120,6 +141,8 @@ class ProductRepository extends ServiceEntityRepository
 
         return $paginatorService->getPagesCount(self::PRODUCTS_PER_PAGE);
     }
+
+    /** ------------------------------------------------ SUB CATEGORY CRITERIA  ------------------------------------------------ */
 
     public function getProductsBy_MainCat_SubCatWithCriteria(MainCategory $mainCategory, SubCategory $subCategory, Criteria $criteria, int $page)
     {
@@ -160,6 +183,8 @@ class ProductRepository extends ServiceEntityRepository
 
         return $paginatorService->getPagesCount(self::PRODUCTS_PER_PAGE);
     }
+
+    /** ------------------------------------------------ CATEGORY CRITERIA  ------------------------------------------------ */
 
     public function getProductsBy_MainCat_SubCat_CatWithCriteria(MainCategory $mainCategory, SubCategory $subCategory, Category $category, Criteria $criteria, int $page)
     {
