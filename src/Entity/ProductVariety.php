@@ -23,7 +23,7 @@ class ProductVariety
     private $product;
 
     /**
-     * @ORM\Column(type="decimal", precision=10, scale=4)
+     * @ORM\Column(type="string", length=50)
      */
     private $weight;
 

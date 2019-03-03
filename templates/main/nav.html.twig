@@ -29,7 +29,7 @@
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <section class="categories">
-                                    {% if mainCategory.brand is not empty %}
+                                    {# {% if mainCategory.brand is not empty %}
                                         <section>
                                             <div class="subcategory">
                                                 <a class="dropdown-item" href="#">Марки</a>
@@ -42,7 +42,7 @@
                                                 </div>
                                             {% endfor %}
                                         </section>
-                                    {% endif %}
+                                    {% endif %}#}
 
                                     {% for subCategory in mainCategory.subcategory %}
                                         <section>
