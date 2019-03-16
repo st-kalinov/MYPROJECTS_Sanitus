@@ -1,7 +1,9 @@
 #Options div.main-sub-cat {
   text-align: center;
   margin: 0.5rem 0;
-  font-weight: bold; }
+  font-weight: bold;
+  font-size: 0.9rem; }
   #Options div.main-sub-cat a.active-cat {
-    font-weight: bold;
-    background-color: red; }
+    font-weight: bolder;
+    font-size: 1.2rem;
+    text-decoration: underline; }

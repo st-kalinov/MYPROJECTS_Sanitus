@@ -1,0 +1,48 @@
+{% if products is not empty %}
+    <div class="allProducts">
+        {% for product in products %}
+            <div class="product" data-aos="flip-left" data-aos-duration="2000">
+                {% if product.productVarieties|length > 1 %}
+                    <img src="{{ asset('images/icons/promo.png') }}" alt="" class="promo-img">
+                {% endif %}
+                <a href="#" class="img-block">
+                    <img src="/images/products/{{ product.img }}" alt="">
+                </a>
+                <div class="product-block-info">
+                    <a href="" class="product-name">{{ product.name }}</a>
+                </div>
+                <div class="add-in-cart">
+                    <a href="#" title="Добави в кошницата"><img src="{{ asset('images/icons/iconfinder_shopping-cart_blue_68809.png') }}" alt=""></a></span>
+                </div>
+                <div class="product-price">
+                    <small>{{ product.productVarieties|last.finalPrice }} лв.</small>
+                    <small> - </small>
+                    <small>{{ product.productVarieties|first.finalPrice}} лв.</small>
+                </div>
+
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="allProducts">
+        <h2>Няма намерени продукти</h2>
+    </div>
+{% endif %}
+{% if pagesCount >= 2 %}
+    <div class="js-pagination pagination-block">
+        <ul class="pagination pg-blue justify-content-center">
+            <li data-page="1" class="page-previous-item">
+                <a href="" class="page-link">Previous</a>
+            </li>
+            {% for i in range(1,pagesCount) %}
+                <li data-page="{{ loop.index }}" class="page-item {{ loop.index == 1 ? 'default-page' : '' }}">
+                    <a class="page-link">{{ loop.index }}</a>
+                </li>
+            {% endfor %}
+
+            <li data-page="2" class="page-next-item">
+                <a href="" class="page-link">Next</a>
+            </li>
+        </ul>
+    </div>
+{% endif %}

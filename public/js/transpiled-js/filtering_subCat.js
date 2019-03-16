@@ -67,11 +67,15 @@ $(document).ready(function () {
                 $('.products').html(data);
                 removeActivePageClass();
                 setActivePageClass(paginationBlockClass, "ul li", activePage, "current-page");
+                setPreviousPage_dataPage(paginationBlockClass, "ul li", previousPageClass, page - 1);
+                setNextPage_dataPage(paginationBlockClass, "ul li", nextPageClass, page + 1);
             },
             error: function error() {
                 $('.ajax-gif').hide();
             }
         });
     }
+
+    toggleArrowIcon();
 });
 //# sourceMappingURL=filtering_subCat.js.map

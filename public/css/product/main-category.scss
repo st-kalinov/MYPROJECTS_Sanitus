@@ -64,7 +64,7 @@ div.content {
     position: relative;
     left: 7%;
     width: 12rem;
-    min-height: 3.2rem;
+    min-height: 2.2rem;
     border-radius: 2.5rem;
     border: 0;
     background-color: #4bd6c5;
@@ -186,8 +186,9 @@ div.content {
       }
     }
 
-    div.check-all {
-      left: 30%;
+    div.check-all a {
+      line-height: 2.2rem;
+
     }
   }
 }

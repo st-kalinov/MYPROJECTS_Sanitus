@@ -1,7 +1,7 @@
 <section id="productFilterSection">
     <div class="filter-type-section">
-        <h2 class="attribute-name">Марки</h2>
-        <div class="options">
+        <h2 class="attribute-name" data-toggle="collapse" data-target="#collapse1" aria-expanded="false" aria-controls="collapse1">Марки <i class="fas fa-chevron-circle-up"></i></h2>
+        <div class="options collapse show" id="collapse1">
             {% for brand in brands %}
                 <div class="option js-brand">
                     <div class="input-block">
@@ -16,8 +16,8 @@
         </div>
     </div>
     <div class="filter-type-section">
-        <h2 class="attribute-name">Промоции</h2>
-        <div class="options">
+        <h2 class="attribute-name" data-toggle="collapse" data-target="#collapse2" aria-expanded="false" aria-controls="collapse2">Промоции <i class="fas fa-chevron-circle-up"></i></h2>
+        <div class="options collapse show" id="collapse2">
             <div class="option js-promotion">
                 <div class="input-block">
                     <input id="optp1" type="checkbox" name="promotion" value="1">
@@ -29,8 +29,8 @@
         </div>
     </div>
     <div class="filter-type-section">
-        <h2 class="attribute-name">Цена<small>(от/до)</small></h2>
-        <div class="options">
+        <h2 class="attribute-name" data-toggle="collapse" data-target="#collapse3" aria-expanded="false" aria-controls="collapse3">Цена<small>(от/до)</small> <i class="fas fa-chevron-circle-up"></i></h2>
+        <div class="options collapse show" id="collapse3">
             <input type="text" class="js-range-slider" name="my_range" value=""
                    data-min="0"
                    data-max="300"
@@ -44,5 +44,7 @@
             </div>
         </div>
     </div>
-    <button class="clear-filters">Изчисти</button>
+    <div class="clear-filters">
+        <button>Изчисти</button>
+    </div>
 </section>

@@ -214,7 +214,9 @@ footer {
 @media screen and (max-width: 990px) {
   nav {
     #navbar {
-      padding: 0;
+      ul li.nav-item a {
+        padding: 0.5rem;
+      }
       section.categories {
         justify-content: center;
 
@@ -243,13 +245,14 @@ footer {
             border-bottom: 0;
           }
           div.subcategory {
-            font-size: 1.2rem;
+            font-size: 1rem;
             a {
               padding: 0.5rem 0;
             }
           }
 
           div.category {
+            font-size: 0.8rem;
             div.category-text {
               margin-bottom: 0.5rem;
             }

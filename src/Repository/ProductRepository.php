@@ -20,7 +20,7 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class ProductRepository extends ServiceEntityRepository
 {
-    const PRODUCTS_PER_PAGE = 10;
+    const PRODUCTS_PER_PAGE = 12;
 
     public function __construct(RegistryInterface $registry)
     {

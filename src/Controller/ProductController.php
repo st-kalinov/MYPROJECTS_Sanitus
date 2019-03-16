@@ -29,7 +29,7 @@ class ProductController extends AbstractController
         $products = $productRepository->getProductsBy_CategoryLevel($mainCategory);
         $brands = $productRepository->getProductsBrandsBy_CategoryLevel($mainCategory);
 
-        $blocks = $this->renderView('product/product_block.html.twig', [
+        $blocks = $this->renderView('product/products_block.html.twig', [
             'products' => $products,
             'pagesCount' => $pagesCount,
         ]);
@@ -56,7 +56,7 @@ class ProductController extends AbstractController
         $products = $filtered['products'];
         $pagesCount = $filtered['pagesCount'];
 
-        $blocks = $this->renderView('product/product_block.html.twig', [
+        $blocks = $this->renderView('product/products_block.html.twig', [
             'products' => $products,
             'pagesCount' => $pagesCount
         ]);
@@ -82,7 +82,7 @@ class ProductController extends AbstractController
         $pagesCount = $productRepository->getCountOfProductPagesBy_CategoryLevel($mainCategory, $subCategory);
         $brands = $productRepository->getProductsBrandsBy_CategoryLevel($mainCategory, $subCategory);
 
-        $blocks = $this->renderView('product/product_block.html.twig', [
+        $blocks = $this->renderView('product/products_block.html.twig', [
             'products' => $products,
             'pagesCount' => $pagesCount
         ]);
@@ -116,7 +116,7 @@ class ProductController extends AbstractController
         $pagesCount = $filtered['pagesCount'];
 
 
-        $blocks = $this->renderView('product/product_block.html.twig', [
+        $blocks = $this->renderView('product/products_block.html.twig', [
             'products' => $products,
             'pagesCount' => $pagesCount
         ]);
@@ -146,7 +146,7 @@ class ProductController extends AbstractController
         $pagesCount = $productRepository->getCountOfProductPagesBy_CategoryLevel($mainCategory, $subCategory, $category);
         $brands = $productRepository->getProductsBrandsBy_CategoryLevel($mainCategory, $subCategory, $category);
 
-        $blocks = $this->renderView('product/product_block.html.twig', [
+        $blocks = $this->renderView('product/products_block.html.twig', [
             'products' => $products,
             'pagesCount' => $pagesCount
         ]);
@@ -185,7 +185,7 @@ class ProductController extends AbstractController
         $pagesCount = $filtered['pagesCount'];
 
 
-        $blocks = $this->renderView('product/product_block.html.twig', [
+        $blocks = $this->renderView('product/products_block.html.twig', [
             'products' => $products,
             'pagesCount' => $pagesCount
         ]);

@@ -8,6 +8,7 @@
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('css/product/filtering-aside-block.css') }}">
     <link rel="stylesheet" href="{{ asset('css/product/allProducts-subCat.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/product/products-block.css') }}">
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.0/css/ion.rangeSlider.min.css"/>
 {% endblock %}
@@ -16,7 +17,7 @@
         <div class="ajax-gif">
             <img src="{{ asset('images/ajax-loader.gif') }}" alt="">
         </div>
-        <aside id="Options" class="col-lg-4 col-xl-3">
+        <aside id="Options" class="col-lg-2 col-xl-2">
             <div class="filter-type-section">
                 <h2 class="attribute-name main-category" data-slug="{{ mainCategory.slug }}" data-sub-slug="{{ subCategory.slugSub }}">Тип {{ subCategory.name }}</h2>
                 <div class="options">
@@ -29,10 +30,10 @@
             </div>
             {{ include('product/filtering-aside-block.html.twig') }}
         </aside>
-        <div class="products offset-sm-1 col-lg-7 col-xl-8">
+        <section class="products col-lg-9 col-xl-9 ml-auto">
             {# products BLOCKS + PAGINATION #}
             {{ blocks|raw }}
-        </div>
+        </section>
     </div>
 
 {% endblock %}

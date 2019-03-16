@@ -1,0 +1,92 @@
+@import url("https://fonts.googleapis.com/css?family=Lobster");
+@import url("https://fonts.googleapis.com/css?family=Didact+Gothic");
+section.products {
+  margin: 0;
+  padding: 0; }
+  section.products div.allProducts {
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between; }
+    section.products div.allProducts div.product {
+      position: relative;
+      width: 24%;
+      border: 1px solid rgba(0, 0, 0, 0.31);
+      margin: 0 0 2rem 0;
+      padding: 0;
+      box-shadow: 9px 10px 3px -4px rgba(0, 0, 0, 0.31); }
+      section.products div.allProducts div.product img.promo-img {
+        display: block;
+        position: absolute;
+        width: 40%; }
+      section.products div.allProducts div.product a.img-block {
+        display: block;
+        margin: 1rem auto; }
+        section.products div.allProducts div.product a.img-block img {
+          display: block;
+          width: 50%;
+          margin: auto;
+          padding-bottom: 1rem;
+          border-bottom: 1px solid grey; }
+      section.products div.allProducts div.product div.product-block-info {
+        margin: 0;
+        display: block;
+        text-align: center;
+        min-height: 4rem;
+        padding: 0 0.5rem; }
+        section.products div.allProducts div.product div.product-block-info a.product-name {
+          text-decoration: none;
+          color: black;
+          font-family: 'Didact Gothic', sans-serif;
+          font-weight: bold;
+          min-height: 6rem;
+          width: 90%;
+          font-size: 0.9rem; }
+      section.products div.allProducts div.product div.add-in-cart {
+        text-align: center;
+        margin-top: 1rem; }
+        section.products div.allProducts div.product div.add-in-cart a {
+          padding: 0.8rem; }
+          section.products div.allProducts div.product div.add-in-cart a img {
+            width: 32px;
+            height: 32px; }
+          section.products div.allProducts div.product div.add-in-cart a:hover {
+            border: 1px solid #259cff;
+            border-radius: 40%; }
+      section.products div.allProducts div.product div.product-price {
+        margin: 2rem auto 1rem auto;
+        display: flex;
+        justify-content: space-around;
+        align-items: flex-end;
+        width: 90%; }
+        section.products div.allProducts div.product div.product-price small {
+          font-weight: bold;
+          font-size: 0.9rem;
+          color: #4bd6c5; }
+      section.products div.allProducts div.product:hover {
+        box-shadow: 1px 6px 30px -4px rgba(0, 0, 0, 0.75);
+        border: 0; }
+  section.products div.pagination-block {
+    margin-top: 3rem; }
+    section.products div.pagination-block ul li {
+      border: 1px solid white;
+      font-family: 'Lobster', cursive; }
+      section.products div.pagination-block ul li.current-page, section.products div.pagination-block ul li.default-page {
+        font-weight: bolder;
+        color: #ff896d; }
+      section.products div.pagination-block ul li:last-child {
+        border-top-right-radius: 10rem; }
+
+@media (max-width: 1186px) {
+  section.products div.allProducts div.product {
+    width: 32.333%; } }
+
+@media (max-width: 900px) {
+  section.products div.allProducts div.product {
+    width: 49%; } }
+
+@media (max-width: 430px) {
+  div.pagination-block li {
+    font-size: 0.8rem; }
+    div.pagination-block li a {
+      padding: 0.5rem; } }
