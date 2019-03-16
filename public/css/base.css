@@ -68,6 +68,8 @@ nav {
       nav #navbar ul li.nav-item {
         border-left: 2px solid transparent;
         border-right: 2px solid transparent; }
+        nav #navbar ul li.nav-item > a {
+          letter-spacing: 2px; }
         nav #navbar ul li.nav-item:hover {
           background-color: #b7d6cc; }
         nav #navbar ul li.nav-item a {
